@@ -16,28 +16,44 @@ This script automates the setup, management, and restoration of both Zenon Netwo
 
 ## Prerequisites
 
-This script assumes you're running a Linux distribution that uses `apt` as a package manager (e.g., Ubuntu or Debian). You need to have `git` installed. You must also have superuser (root) privileges to execute this script.
+This script requires:
+- A Linux distribution that uses `apt` as package manager (e.g., Ubuntu or Debian)
+- `git` installed
+- Superuser (root) privileges
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/your-repo/deployment.git
+cd deployment
+```
+
+2. Make the script executable:
+```bash
+chmod +x zenon.sh
+```
 
 ## Usage
 
-Clone the script or save it locally, then run it using a bash terminal:
+Run the script with superuser privileges:
 
 ```bash
-sudo ./go-zenon.sh [OPTIONS]
+sudo ./zenon.sh [OPTIONS]
 ```
 
 ### Options
 
-- `--deploy`: Deploy and set up the Zenon Network
-- `--deploy --hq [URL]`: Deploy and set up the HyperQube Network (optional custom repository URL)
+- `--deploy [URL]`: Deploy and set up the Zenon Network. Optional URL to override default repo.
+- `--deploy --hq [URL]`: Deploy and set up the HyperQube Network. Optional URL to override default repo.
 - `--buildSource [URL]`: Build from a specific source repository
-- `--restore`: Restore from a bootstrap
-- `--restart`: Restart the service
+- `--restore`: Restore go-zenon from bootstrap
+- `--restart`: Restart the go-zenon service
 - `--stop [--hq]`: Stop the node service (add --hq for HyperQube)
 - `--start [--hq]`: Start the node service (add --hq for HyperQube)
 - `--status [--hq]`: Monitor logs (add --hq for HyperQube)
 - `--grafana`: Install Grafana for monitoring metrics
-- `--help`: Display the help message
+- `--help`: Display help message
 
 ### Example Usage
 
@@ -45,49 +61,54 @@ sudo ./go-zenon.sh [OPTIONS]
 
 To deploy the Zenon Network:
 ```bash
-sudo ./go-zenon.sh --deploy
+sudo ./zenon.sh --deploy
+```
+
+To deploy Zenon Network with a custom repository:
+```bash
+sudo ./zenon.sh --deploy https://github.com/your-fork/go-zenon.git
 ```
 
 To deploy HyperQube:
 ```bash
-sudo ./go-zenon.sh --deploy --hq
+sudo ./zenon.sh --deploy --hq
 ```
 
 To deploy HyperQube with a custom repository:
 ```bash
-sudo ./go-zenon.sh --deploy --hq https://github.com/your-fork/hyperqube_z.git
+sudo ./zenon.sh --deploy --hq https://github.com/your-fork/hyperqube_z.git
 ```
 
 #### Managing Services
 
 Start Zenon service:
 ```bash
-sudo ./go-zenon.sh --start
+sudo ./zenon.sh --start
 ```
 
 Start HyperQube service:
 ```bash
-sudo ./go-zenon.sh --start --hq
+sudo ./zenon.sh --start --hq
 ```
 
 Stop Zenon service:
 ```bash
-sudo ./go-zenon.sh --stop
+sudo ./zenon.sh --stop
 ```
 
 Stop HyperQube service:
 ```bash
-sudo ./go-zenon.sh --stop --hq
+sudo ./zenon.sh --stop --hq
 ```
 
 Monitor Zenon logs:
 ```bash
-sudo ./go-zenon.sh --status
+sudo ./zenon.sh --status
 ```
 
 Monitor HyperQube logs:
 ```bash
-sudo ./go-zenon.sh --status --hq
+sudo ./zenon.sh --status --hq
 ```
 
 ### Default Configurations
@@ -104,11 +125,7 @@ sudo ./go-zenon.sh --status --hq
 - Binary: hqzd
 - Service: go-hyperqube
 
-### Customizing the Script
-
-You can adjust the Go version by modifying the `GO_VERSION` variable in the script. The default is `1.23.0`.
-
-## Notes
+### Notes
 
 - Ensure you run this script as root or use `sudo` for it to function properly
 - The script is designed to be non-interactive when installing dependencies
