@@ -14,9 +14,9 @@ install_grafana_components() {
 	# Install Node Exporter
 	NODE_EXPORTER_VERSION="1.6.1"
 	echo "Installing Node Exporter..."
-	wget -q -O node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
-	tar -xzf node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
-	mv node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64/node_exporter /usr/local/bin/
+	wget -q -O node_exporter-${NODE_EXPORTER_VERSION}.${ZENON_ARCH}.tar.gz https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.${ZENON_ARCH}.tar.gz
+	tar -xzf node_exporter-${NODE_EXPORTER_VERSION}.${ZENON_ARCH}.tar.gz
+	mv node_exporter-${NODE_EXPORTER_VERSION}.${ZENON_ARCH}/node_exporter /usr/local/bin/
 	useradd -rs /bin/false node_exporter
 	tee /etc/systemd/system/node_exporter.service >/dev/null <<EOF
 [Unit]
@@ -36,18 +36,18 @@ EOF
 	systemctl daemon-reload
 	systemctl start node_exporter
 	systemctl enable node_exporter
-	rm -rf node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64
+	rm -rf node_exporter-${NODE_EXPORTER_VERSION}.${ZENON_ARCH}.tar.gz node_exporter-${NODE_EXPORTER_VERSION}.${ZENON_ARCH}
 
 	# Install Prometheus
 	PROMETHEUS_VERSION="2.47.0"
 	echo "Installing Prometheus..."
-	wget -q -O prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz
-	tar -xzf prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz
-	mv prometheus-${PROMETHEUS_VERSION}.linux-amd64/prometheus /usr/local/bin/
-	mv prometheus-${PROMETHEUS_VERSION}.linux-amd64/promtool /usr/local/bin/
-	mv prometheus-${PROMETHEUS_VERSION}.linux-amd64/consoles /etc/prometheus/
-	mv prometheus-${PROMETHEUS_VERSION}.linux-amd64/console_libraries /etc/prometheus/
-	mv prometheus-${PROMETHEUS_VERSION}.linux-amd64/prometheus.yml /etc/prometheus/
+	wget -q -O prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}.tar.gz https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}.tar.gz
+	tar -xzf prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}.tar.gz
+	mv prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}/prometheus /usr/local/bin/
+	mv prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}/promtool /usr/local/bin/
+	mv prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}/consoles /etc/prometheus/
+	mv prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}/console_libraries /etc/prometheus/
+	mv prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}/prometheus.yml /etc/prometheus/
 	useradd -rs /bin/false prometheus
 	tee /etc/systemd/system/prometheus.service >/dev/null <<EOF
 [Unit]
@@ -69,7 +69,7 @@ EOF
 	systemctl daemon-reload
 	systemctl start prometheus
 	systemctl enable prometheus
-	rm -rf prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz prometheus-${PROMETHEUS_VERSION}.linux-amd64
+	rm -rf prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}.tar.gz prometheus-${PROMETHEUS_VERSION}.${ZENON_ARCH}
 
 	# Add Node Exporter job to Prometheus configuration
 	echo "Adding Node Exporter job to Prometheus configuration..."

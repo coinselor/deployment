@@ -6,17 +6,18 @@ BUILD_SOURCE_URL=""
 
 # Go configuration
 ARCH=$(uname -m)
-GO_URL=""
+case "$ARCH" in
+x86_64 | amd64)
+	GO_ARCH="amd64"
+	ZENON_ARCH="linux-amd64"
+	;;
+aarch64 | arm64)
+	GO_ARCH="arm64"
+	ZENON_ARCH="linux-arm64"
+	;;
+esac
 GO_VERSION=1.23.0
-
-if [[ "$ARCH" == "x86_64" ]]; then
-	GO_URL="https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz"
-fi
-
-# ARM Support TODO
-# if [[ "$ARCH" == "arm64" ]]; then
-#     GO_URL="https://go.dev/dl/go$GO_VERSION.linux-arm64.tar.gz"
-# fi
+GO_URL="https://go.dev/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
 
 if [[ "$GO_URL" == "" ]]; then
 	echo "Error: $ARCH architecture is not supported."

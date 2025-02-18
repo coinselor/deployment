@@ -38,8 +38,17 @@ clone_and_build_node() {
 
 	cd "$repo_dir" || exit
 
-	# Build the project
-	GO111MODULE=on ../go/bin/go build -o "build/$ACTIVE_BINARY" "./cmd/$ACTIVE_BINARY"
+	if [[ "$BUILD_SOURCE" == "true" ]]; then
+		# Build from source
+		GO111MODULE=on ../go/bin/go build -o "build/$ACTIVE_BINARY" "./cmd/$ACTIVE_BINARY"
+	else
+		# Download prebuilt binary
+		echo "Downloading prebuilt binary for $ZENON_ARCH"
+		wget -q "https://github.com/zenon-network/go-zenon/releases/download/v${VERSION}/znnd-${ZENON_ARCH}.tar.gz"
+		tar -xzf znnd-${ZENON_ARCH}.tar.gz -C /usr/local/bin/
+		rm znnd-${ZENON_ARCH}.tar.gz
+	fi
+
 	cp "build/$ACTIVE_BINARY" /usr/local/bin/
 }
 
