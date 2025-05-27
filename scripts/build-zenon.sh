@@ -34,16 +34,14 @@ select_branch() {
     
     selected_branch=$(printf "%s\n" "${branches[@]}" | gum choose \
         --header="$(gum style --foreground 242 --padding "1 1" "SELECT A BRANCH:")" \
-        --header.foreground="242" \
         --cursor.foreground="46" \
-        --selected.foreground="46" \
-        --height=15)
+        --selected.foreground="46")
     
     if [ -n "$selected_branch" ]; then
         success_log "You selected branch: $selected_branch"
     else
         error_log "No branch selected, using default"
-        selected_branch="master" # Fallback to a default branch
+        selected_branch="master"
     fi
 }
 
@@ -78,15 +76,17 @@ stop_znnd_if_running() {
 clone_and_build_go_zenon() {
     local repo_url=${1:-"$ZENON_REPO_URL"}
     local branch=${2:-"$ZENON_BRANCH"}
-
-    gum style \
-        --foreground 245 \
-        --padding "1 1" \
-        -- "BUILD: Zenon Network from Source"
     
     stop_znnd_if_running
 
     if [ "$BUILD_SOURCE" = true ]; then
+
+        gum style \
+            --foreground 245 \
+            --align center \
+            --width 70 \
+            --padding "1 1" \
+            -- "BUILD: Zenon Network from Source"
 
         gum style \
             --foreground 245 \
@@ -103,10 +103,8 @@ clone_and_build_go_zenon() {
         
         repo_choice=$(printf "%s\n" "${repo_options[@]}" | gum choose \
             --header="$(gum style --foreground 242 --padding "1 1" "SELECT A REPOSITORY:")" \
-            --header.foreground="242" \
             --cursor.foreground="46" \
-            --selected.foreground="46" \
-            --height=6)
+            --selected.foreground="46")
     
         repo_type=$(echo "$repo_choice" | awk -F' →' '{print $1}')
         
