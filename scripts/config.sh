@@ -53,11 +53,13 @@ BUILD_SOURCE_URL="${BUILD_SOURCE_URL:-}"
 # -----------------------------------------------------------------------------
 # Directory Structure
 # -----------------------------------------------------------------------------
-# Base directory containing all scripts
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Root directory of the project
-PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+if [ -z "${PROJECT_ROOT:-}" ]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+fi
+
+SCRIPT_DIR="${PROJECT_ROOT}/scripts"
 
 # Where binaries will be installed
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"

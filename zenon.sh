@@ -3,12 +3,13 @@
 set -euo pipefail
 trap 'echo "Error: Script failed on line $LINENO" >&2' ERR
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-. "$SCRIPT_DIR/scripts/config.sh"
-. "$SCRIPT_DIR/scripts/install-gum.sh"
-. "$SCRIPT_DIR/scripts/logging.sh"
-. "$SCRIPT_DIR/scripts/utils.sh"
-. "$SCRIPT_DIR/scripts/menu.sh"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+. "$PROJECT_ROOT/scripts/config.sh"
+. "$PROJECT_ROOT/scripts/install-gum.sh"
+. "$PROJECT_ROOT/scripts/logging.sh"
+. "$PROJECT_ROOT/scripts/utils.sh"
+. "$PROJECT_ROOT/scripts/menu.sh"
 
 if [[ $# -eq 0 ]]; then
 	show_menu
