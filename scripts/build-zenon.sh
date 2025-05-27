@@ -58,11 +58,21 @@ clone_and_build_go_zenon() {
     stop_znnd_if_running
 
     if [ "$BUILD_SOURCE" = true ]; then
-        if [ -n "$BUILD_SOURCE_URL" ]; then
-            repo_url="$BUILD_SOURCE_URL"
+      if gum confirm "Would you like to use a custom repository?" --default=false; then
+            repo_url=$(gum input --placeholder "Enter repository URL (e.g. https://github.com/user/repo.git)")
+            if [ -z "$repo_url" ]; then
+                repo_url="$ZENON_REPO_URL"
+                info_log "Using default repository: $repo_url"
+            else
+                info_log "Using custom repository: $repo_url"
+            fi
+        else
+            info_log "Using default repository: $repo_url"
         fi
 
+        info_log "Fetching branches from repository..."
         branches_array=($(get_branches "$repo_url"))
+        
         if [ ${#branches_array[@]} -eq 0 ]; then
             error_log "No branches found in repository"
             return 1

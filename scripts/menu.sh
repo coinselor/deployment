@@ -56,6 +56,7 @@ ASCII
             deploy_go_zenon
             ;;
         "build")
+            BUILD_SOURCE=true
             clone_and_build_go_zenon
             ;;
         "restore")
