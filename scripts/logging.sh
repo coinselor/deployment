@@ -2,17 +2,21 @@
 
 # =============================================================================
 # Logging Utilities
-# Provides error_log, warn_log, success_log functions using gum.
+# Provides error_log, warn_log, info_log, success_log functions using gum.
 # =============================================================================
 
 error_log() {
-    gum log --level error "$@" >&2
+    gum log --time rfc822 --level error "$@" >&2
 }
 
 warn_log() {
-    gum log --level warn "$@" >&2
+    gum log --time rfc822 --level warn "$@" >&2
+}
+
+info_log() {
+    gum log --time rfc822 --level info "$@"
 }
 
 success_log() {
-    gum log --level info "✓ $@"
+    gum log --time rfc822 --level info "✓ $@"
 }
