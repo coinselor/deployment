@@ -10,7 +10,6 @@ get_branches() {
     
     info_log "Fetching branches from $repo_url"
     
-    # Use gum spin to show progress while fetching branches
     branches=$(gum spin --spinner dot --title "Fetching branches..." -- \
         bash -c "git ls-remote --heads '$repo_url' | awk '{print \$2}' | sed 's|refs/heads/||'")
     
@@ -26,11 +25,15 @@ get_branches() {
 select_branch() {
     local branches=("$@")
     
-    gum style --foreground 212 --border normal --border-foreground 212 --align center --width 50 --margin "1 2" --padding "0 1" \
-        "Select a Branch"
+    gum style \
+        --foreground 245 \
+        --align center \
+        --width 70 \
+        --margin "1 0" \
+        "Branch Selection"
     
     selected_branch=$(printf "%s\n" "${branches[@]}" | gum choose \
-        --header="$(gum style --foreground 242 --padding "0 1" "Available branches from repository:")" \
+        --header="$(gum style --foreground 242 --padding "1 1" "SELECT A BRANCH:")" \
         --header.foreground="242" \
         --cursor.foreground="46" \
         --selected.foreground="46" \
@@ -77,25 +80,63 @@ clone_and_build_go_zenon() {
     local branch=${2:-"$ZENON_BRANCH"}
 
     gum style \
-        --foreground 45 --align center --width 70 --margin "1 2" --padding "1 2" \
-        "Building Zenon Node from Source"
+        --foreground 245 \
+        --padding "1 1" \
+        -- "BUILD: Zenon Network from Source"
     
     stop_znnd_if_running
 
     if [ "$BUILD_SOURCE" = true ]; then
-        gum style --foreground 212 --align left --width 70 --margin "1 0" "Select Repository Source"
+
+        gum style \
+            --foreground 245 \
+            --align center \
+            --width 70 \
+            --margin "1 0" \
+            "Choose a Repository"
         
-        if gum confirm "Would you like to use a custom repository?" --default=false; then
-            repo_url=$(gum input --width 70 --placeholder "Enter repository URL (e.g. https://github.com/user/repo.git)")
-            if [ -z "$repo_url" ]; then
+        repo_options=(
+            "zenon-network → https://github.com/zenon-network/go-zenon.git"
+            "hypercore-one → https://github.com/hypercore-one/go-zenon.git"
+            "custom → Provide a custom repository URL"
+        )
+        
+        repo_choice=$(printf "%s\n" "${repo_options[@]}" | gum choose \
+            --header="$(gum style --foreground 242 --padding "1 1" "SELECT A REPOSITORY:")" \
+            --header.foreground="242" \
+            --cursor.foreground="46" \
+            --selected.foreground="46" \
+            --height=6)
+    
+        repo_type=$(echo "$repo_choice" | awk -F' →' '{print $1}')
+        
+        case "$repo_type" in
+            "zenon-network")
+                repo_url="https://github.com/zenon-network/go-zenon.git"
+                info_log "Selected Zenon Network repository"
+                ;;
+            "hypercore-one")
+                repo_url="https://github.com/hypercore-one/go-zenon.git"
+                info_log "Selected Hypercore One repository"
+                ;;
+            "custom")
+                repo_url=$(gum input \
+                    --width 70 \
+                    --placeholder "Enter repository URL (e.g. https://github.com/user/repo.git)" \
+                    --cursor.foreground="46")
+                
+                if [ -z "$repo_url" ]; then
+                    repo_url="$ZENON_REPO_URL"
+                    info_log "No URL provided, using default: $repo_url"
+                else
+                    info_log "Using custom repository: $repo_url"
+                fi
+                ;;
+            *)
                 repo_url="$ZENON_REPO_URL"
                 info_log "Using default repository: $repo_url"
-            else
-                info_log "Using custom repository: $repo_url"
-            fi
-        else
-            info_log "Using default repository: $repo_url"
-        fi
+                ;;
+        esac
 
         branches_array=($(get_branches "$repo_url"))
         
@@ -111,7 +152,12 @@ clone_and_build_go_zenon() {
         info_log "Using branch: $branch"
     fi
 
-    gum style --foreground 212 --align left --width 70 --margin "1 0" "Build Process"
+    gum style \
+        --foreground 242 \
+        --align center \
+        --width 70 \
+        --margin "1 0" \
+        "Build Process"
     
     gum spin --spinner dot --title "Checking for existing go-zenon directory..." -- \
         rename_existing_dir "go-zenon" || {
