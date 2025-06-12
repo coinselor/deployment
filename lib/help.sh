@@ -15,30 +15,30 @@ ASCII
     local description_md="A deployment script to automate the setup and management of **Zenon Network** infrastructure."
     gum format --type markdown "$description_md" | gum style --foreground "#808080" --align "center" --width 70 --margin "1 0"
 
-    gum style --border "rounded" --foreground "#00FF00" --border-foreground "#00FF00" --align "center" --width 61 --padding "0 1" --margin "1 0" "INTERACTIVE"
+    gum style --border "rounded" --foreground "#A9A9A9" --border-foreground "#A9A9A9" --align "center" --width 61 --padding "0 1" --margin "1 0" "INTERACTIVE"
 
-    gum format --type markdown "**USAGE:**" | gum style --foreground "#00FF00" --margin "0 0 0 0"
-    gum format --type markdown "\`sudo ./zenon.sh [COMMAND]\`" | gum style --foreground "#00FF00" --margin "0 0 0 8"
+    gum style --foreground "#00FF00" "USAGE:"
+    gum style --foreground "#00FF00" "sudo ./zenon.sh [COMMAND]"
     echo
-    gum style --foreground "#A9A9A9" --margin "0 0 1 10" "COMMAND can be 'zenon' (default) or 'hyperqube'."
+    gum style --foreground "#A9A9A9" --margin "0 0 1 0" "COMMAND can be 'zenon' (default) or 'hyperqube'."
+    echo
 
     gum style --foreground "#A9A9A9" "INTERACTIVE COMMANDS:"
     
     printf "%-12s %s\n" "zenon" "Show the interactive menu for Zenon Network." \
-                         "hyperqube" "Show the interactive menu for HyperQube Network." | \
-        gum style --foreground "#A9A9A9" --margin "0 0 1 0"
+                         "hyperqube" "Show the interactive menu for HyperQube Network."
 
-    gum style --border "rounded" --foreground "#00FF00" --border-foreground "#00FF00" --align "center" --width 61 --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
+    gum style --border "rounded" --foreground "#A9A9A9" --border-foreground "#A9A9A9" --align "center" --width 61 --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
 
-    gum format --type markdown "**USAGE:**" | gum style --foreground "#00FF00" --margin "0 0 0 0"
-    gum format --type markdown "\`sudo ./zenon.sh [COMMAND] [ARGUMENTS]\`" | gum style --foreground "#00FF00" --margin "0 0 0 8"
+    gum style --foreground "#00FF00" "USAGE:"
+    gum style --foreground "#00FF00" "sudo ./zenon.sh [COMMAND] [ARGUMENTS]"
     
     local usage_details="**COMMAND** is a flag prefixed with '--' (e.g., --deploy)
 **TYPE** can be 'zenon' (default) or 'hyperqube'
 **REPOSITORY** is an **optional** HTTPS git URL
 **BRANCH** is an **optional** and case-sensitive git branch name"
     
-    gum format --type markdown "$usage_details" | gum style --foreground "#A9A9A9" --margin "0 0 1 9"
+    gum format --type markdown "$usage_details"
 
     gum style --foreground "#A9A9A9" "NON-INTERACTIVE COMMANDS:"
 
@@ -49,8 +49,7 @@ ASCII
                                "--start [type]" "Start the node service." \
                                "--monitor [type]" "Monitor node logs in real-time." \
                                "--analytics" "Show the analytics dashboard." \
-                               "--help" "Display this help message." | \
-        gum style --foreground "#A9A9A9" --margin "0 0 1 0"
+                               "--help" "Display this help message."
 
     gum style --foreground "240" --align "center" --width 61 --margin "1 0" --italic "The Future is Encrypted. Only You Can Decrypt It!"
     gum style --foreground "240" --align "center" --width 61 --margin "0 0" --italic "—Zenon Network"
