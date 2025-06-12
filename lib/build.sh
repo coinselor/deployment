@@ -23,15 +23,27 @@ install_dependencies() {
 }
 
 install_go() {
-    echo "Checking for existing Go installation..."
 
-    rename_existing_dir "go"
+    local go_bin="$ZNNSH_DEPLOYMENT_DIR/go/bin/go"
+    local desired_version="go$ZNNSH_GO_VERSION"
 
-    echo "Downloading and installing Go..."
+    if [[ -x "$go_bin" ]]; then
+        local current_version
+        current_version="$("$go_bin" version | awk '{print $3}')"
+        if [[ "$current_version" == "$desired_version" ]]; then
+            info_log "Go $ZNNSH_GO_VERSION already installed – skipping download."
+            return 0
+        else
+            info_log "Found Go version $current_version, expected $desired_version – re-installing."
+            rename_existing_dir "go"
+        fi
+    fi
+
+    info_log "Downloading and installing Go..."
     curl -fsSLo "go.tar.gz" "$ZNNSH_GO_URL"
-    tar -C . -xzf "go.tar.gz"
+    tar -C "$ZNNSH_DEPLOYMENT_DIR" -xzf "go.tar.gz"
     rm "go.tar.gz"
-    echo "Go installed successfully."
+    success_log "Go installed successfully."
 }
 
 get_branches() {
@@ -164,8 +176,7 @@ clone_and_build() {
         --margin "1 0" \
         "Build Process"
     
-    gum spin --spinner meter --spinner.foreground 46 --title "Checking for existing ${node_dir} directory..." -- \
-        rename_existing_dir "${node_dir}" || {
+    rename_existing_dir "${node_dir}" || {
         error_log "Failed to prepare directories"
         return 1
     }
