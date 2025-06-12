@@ -86,18 +86,11 @@ clone_and_build() {
     if [ "$ZNNSH_INTERACTIVE_MODE" = true ]; then
 
         gum style \
-            --foreground 245 \
-            --align center \
-            --width 70 \
-            --padding "1 1" \
-            -- "$build_title"
-
-        gum style \
-            --foreground 245 \
-            --align center \
-            --width 70 \
+            --border "rounded" \
+            --border-foreground "#00FF00" \
+            --foreground "#00FF00" \
             --margin "1 0" \
-            "Choose a Repository"
+            -- "$build_title"
         
         if [[ "$ZNNSH_NODE_TYPE" == "zenon" ]]; then
             repo_options=(
