@@ -13,10 +13,10 @@ ASCII
     gum style --foreground "242" --align "center" --width 61 "An Independent Script."
     
     local styled_zenon
-    styled_zenon=$(gum style --foreground "green" --bold "Zenon Network")
+    styled_zenon=$(gum style --foreground "#00FF00" --bold "Zenon Network")
     echo "A deployment script to automate the setup and management of ${styled_zenon} infrastructure." | gum style --foreground "#808080" --align "center" --width 70 --margin "1 0"
 
-    gum style --border "rounded" --align "center" --padding "0 1" --margin "1 0" "INTERACTIVE"
+    gum style --border "rounded" --border-foreground "#00FF00" --align "center" --padding "0 1" --margin "1 0" "INTERACTIVE"
 
     local i_usage
     i_usage=$(
@@ -35,13 +35,13 @@ ASCII
     for cmd_with_desc in "${interactive_commands[@]}"; do
         IFS="|" read -r cmd description <<<"$cmd_with_desc"
         local styled_cmd
-        styled_cmd=$(printf "%s" "$cmd" | gum style --foreground "green" --width 35)
+        styled_cmd=$(printf "%s" "$cmd" | gum style --foreground "#00FF00" --width 35)
         local styled_desc
         styled_desc=$(printf "%s" "$description" | gum style --foreground "#808080")
         gum join --align "left" "$styled_cmd" "$styled_desc"
     done
 
-    gum style --border "rounded" --border-foreground "green" --align "center" --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
+    gum style --border "rounded" --border-foreground "#00FF00" --align "center" --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
 
     local n_usage
     n_usage=$(
@@ -70,10 +70,10 @@ ASCII
     for cmd_with_desc in "${non_interactive_commands[@]}"; do
         IFS="|" read -r cmd description <<<"$cmd_with_desc"
         local styled_cmd
-        styled_cmd=$(printf "%s" "$cmd" | gum style --foreground "green" --width 35)
+        styled_cmd=$(printf "%s" "$cmd" | gum style --foreground "#00FF00" --width 35)
         local styled_desc
         styled_desc=$(printf "%s" "$description" | gum style --foreground "#808080")
-        gum join --align "left" "$styled_cmd" "$styled_desc"
+        printf "%s\n%s" "$styled_cmd" "$styled_desc" | gum join --align "left"
     done
 }
 
