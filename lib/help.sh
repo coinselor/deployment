@@ -28,7 +28,7 @@ ASCII
         $'Command\tDescription' \
         $'zenon\tShow the interactive menu for Zenon Network.' \
         $'hyperqube\tShow the interactive menu for HyperQube Network.' | \
-        gum table --separator "\t" | gum style --margin "0 0 1 0"
+        gum table | gum style --margin "0 0 1 0"
 
     gum style --border "rounded" --border-foreground "#00FF00" --align "center" --width 61 --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
 
@@ -55,7 +55,7 @@ ASCII
         $'--monitor [type]\tMonitor node logs in real-time.' \
         $'--analytics\tShow the analytics dashboard.' \
         $'--help\tDisplay this help message.' | \
-        gum table --separator "\t" | gum style --margin "0 0 1 0"
+        gum table | gum style --margin "0 0 1 0"
 
     gum style --foreground "240" --align "center" --width 61 --margin "1 0" --italic "The Future is Encrypted. Only You Can Decrypt It!"
     gum style --foreground "240" --align "center" --width 61 --margin "0 0" --italic "—Zenon Network"
