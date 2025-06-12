@@ -24,19 +24,19 @@ ASCII
 
     gum style \
         --foreground "gray" --align center --width 70 --margin "1 0" \
-        "A script to automate the setup, management, and restoration of Zenon Network infrastructure."
+        "A deployment script to automate the setup and management of Zenon Network infrastructure."
     
     echo
     gum style --foreground "dimgray" "USAGE:"
-    gum style --indent 2 "zenon.sh [COMMAND] [ARGUMENTS]"
+    gum style --margin "4 0" "sudo ./zenon.sh [COMMAND] [ARGUMENTS]"
     echo
     
     gum style --foreground "dimgray" "COMMANDS:"
     
     local opts=(
-        "(no arguments)|Show the interactive menu for Zenon."
-        "hyperqube|Show the interactive menu for HyperQube."
-        "--deploy [type] [repo] [branch]|Deploy a node. 'type' can be 'zenon' (default) or 'hyperqube'. 'repo' and 'branch' are optional."
+        "(no commands/arguments)|Show the interactive menu for Zenon Network."
+        "hyperqube|Show the interactive menu for HyperQube Network."
+        "--deploy [type] [repository] [branch]|Deploy a node. 'type' can be 'zenon' (default) or 'hyperqube'. 'repository' and 'branch' are optional."
         "--restore [type]|Restore a node. 'type' can be 'zenon' (default) or 'hyperqube'."
         "--restart [type]|Restart the node service. 'type' can be 'zenon' (default) or 'hyperqube'."
         "--stop [type]|Stop the node service. 'type' can be 'zenon' (default) or 'hyperqube'."
@@ -48,8 +48,8 @@ ASCII
     
     for opt in "${opts[@]}"; do
         IFS="|" read -r flag description <<<"$opt"
-        gum style --indent 2 "$(gum style --foreground "green" "$flag")"
-        gum style --indent 4 --foreground "gray" "$description"
+        gum style --margin "2 0" "$(gum style --foreground "green" "$flag")"
+        gum style --margin "4 0" --foreground "gray" "$description"
     done
 }
 
