@@ -11,7 +11,7 @@ ASCII
 )"
     
     gum style --foreground "242" --align "center" --width 61 "An Independent Script."
-    
+    echo
     local description_md="A deployment script to automate the setup and management of **Zenon Network** infrastructure."
     gum format --type markdown "$description_md"
 
