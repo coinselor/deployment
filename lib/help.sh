@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
 show_help() {
-   
+    
     gum style \
-        --foreground "245" \
-        --padding "1 1" \
+        --foreground "245" --padding "1 1" \
         -- "$(cat <<'ASCII'
  _____  _____   _   _    ___    _   _             _
 |__  / | ____| | \ | |  / _ \  | \ | |      ___  | |__
@@ -14,17 +13,19 @@ show_help() {
 ASCII
 )"
 
-    gum style \
-        --foreground "242" \
-        --align "center" \
-        --width 61 \
-        "An independent script."
+    gum style --foreground "242" --align "center" --width 61 "An independent script."
 
-    local zenon_network_styled
-    zenon_network_styled=$(gum style --foreground "green" --bold "Zenon Network")
-    gum style \
-        --foreground "#808080" --align "center" --width 70 --margin "1 0 1 0" \
-        "A deployment script to automate the setup and management of ${zenon_network_styled} infrastructure."
+    local desc_p1
+    desc_p1=$(gum style --foreground "#808080" "A deployment script to automate the setup and management of ")
+    local desc_p2
+    desc_p2=$(gum style --foreground "green" --bold "Zenon Network")
+    local desc_p3
+    desc_p3=$(gum style --foreground "#808080" " infrastructure.")
+    
+    local final_desc
+    final_desc=$(gum join --align "left" "$desc_p1" "$desc_p2" "$desc_p3")
+
+    gum style --align "center" --width 70 --margin "1 0 1 0" -- "$final_desc"
 
     local usage_title
     usage_title=$(gum style --foreground "#A9A9A9" "USAGE:")
@@ -51,9 +52,10 @@ ASCII
         IFS="|" read -r cmd description <<<"$cmd_with_desc"
         
         local styled_cmd
-        styled_cmd=$(gum style --foreground "#00FF00" --width 35 "$cmd")
+        styled_cmd=$(gum style --foreground "#00FF00" --width 35 -- "$cmd")
+        
         local styled_desc
-        styled_desc=$(gum style --foreground "#808080" "$description")
+        styled_desc=$(gum style --foreground "#808080" -- "$description")
 
         gum join --align "left" "$styled_cmd" "$styled_desc"
     done
