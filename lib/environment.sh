@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 ZNNSH_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export ZNNSH_LIB_DIR
 
 source "$ZNNSH_LIB_DIR/config.sh"
 source "$ZNNSH_LIB_DIR/gum.sh"

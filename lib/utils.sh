@@ -74,3 +74,7 @@ check_go_installation() {
         return 1
     fi
 }
+
+export -f rename_existing_dir
+export -f stop_node_if_running
+

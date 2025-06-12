@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-help() {
+show_help() {
     
     gum style \
         --foreground 245 \

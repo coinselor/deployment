@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-start() {
+start_service() {
     local debug=""
     if [[ "$ZNNSH_DEBUG" = true ]]; then
         debug="--show-output"
@@ -13,3 +13,5 @@ start() {
 
     success_log "$ZNNSH_SERVICE_NAME service started successfully"
 }
+
+export -f start_service

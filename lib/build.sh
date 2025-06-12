@@ -28,7 +28,7 @@ install_go() {
     rename_existing_dir "go"
 
     echo "Downloading and installing Go..."
-    curl -fsSLo "go.tar.gz" "$GO_URL"
+    curl -fsSLo "go.tar.gz" "$ZNNSH_GO_URL"
     tar -C . -xzf "go.tar.gz"
     rm "go.tar.gz"
     echo "Go installed successfully."
@@ -261,8 +261,9 @@ modify_hyperqube_config() {
     echo "Updated ListenPort to 45995 in config.json"
 }
 
-start_service() {
-    echo "Starting $ZNNSH_SERVICE_NAME service..."
-    systemctl start "$ZNNSH_SERVICE_NAME"
-    echo "$ZNNSH_SERVICE_NAME started successfully."
-}
+
+export -f install_dependencies
+export -f install_go
+export -f clone_and_build
+export -f create_service
+export -f modify_hyperqube_config

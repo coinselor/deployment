@@ -3,27 +3,42 @@
 export DEBIAN_FRONTEND=noninteractive
 
 ZNNSH_HARDWARE_ARCH=$(uname -m)
-ZNNSH_GO_VERSION="${ZNNSH_GO_VERSION:=1.23.0}"
+export ZNNSH_BUILD_ARCH
+ZNNSH_BUILD_ARCH=$(dpkg --print-architecture)
+export ZNNSH_HARDWARE_ARCH
 
+
+export ZNNSH_GUM_VERSION="${ZNNSH_GUM_VERSION:=0.16.1}"
+export ZNNSH_GUM_URL="https://github.com/charmbracelet/gum/releases/download/v${ZNNSH_GUM_VERSION}/gum_${ZNNSH_GUM_VERSION}_${ZNNSH_BUILD_ARCH}.deb"
+export ZNNSH_GUM_LOGS="${ZNNSH_GUM_LOGS:=true}"
+
+
+export ZNNSH_GO_VERSION="${ZNNSH_GO_VERSION:=1.23.0}"
 if [[ "$ZNNSH_HARDWARE_ARCH" == "x86_64" ]]; then
     ZNNSH_GO_URL="https://go.dev/dl/go$ZNNSH_GO_VERSION.linux-amd64.tar.gz"
 else
     echo "Error: $ZNNSH_HARDWARE_ARCH architecture is not supported."
     exit 1
 fi
+export ZNNSH_GO_URL
 
-ZNNSH_BUILD_ARCH=$(dpkg --print-architecture)
-ZNNSH_GUM_VERSION="${ZNNSH_GUM_VERSION:=0.16.1}"
-ZNNSH_GUM_URL="https://github.com/charmbracelet/gum/releases/download/v${ZNNSH_GUM_VERSION}/gum_${ZNNSH_GUM_VERSION}_${ZNNSH_BUILD_ARCH}.deb"
-ZNNSH_GUM_LOGS="${ZNNSH_GUM_LOGS:=true}"
 
-ZNNSH_DEBUG="${ZNNSH_DEBUG:=false}"
-ZNNSH_INTERACTIVE_MODE="${ZNNSH_INTERACTIVE_MODE:=true}"
+export ZNNSH_DEBUG="${ZNNSH_DEBUG:=false}"
+export ZNNSH_LOG_FILE="${ZNNSH_LOG_FILE:=$ZNNSH_DEPLOYMENT_DIR/.znnsh.log}"
+export ZNNSH_INTERACTIVE_MODE="${ZNNSH_INTERACTIVE_MODE:=true}"
 
-ZNNSH_INSTALL_DIR="${ZNNSH_INSTALL_DIR:=/usr/local/bin}"
-ZNNSH_BUILD_SOURCE="${ZNNSH_BUILD_SOURCE:=false}"
-ZNNSH_BUILD_URL="${ZNNSH_BUILD_URL:=}"
-ZNNSH_BUILD_BRANCH="${ZNNSH_BUILD_BRANCH:=master}"
+export ZNNSH_INSTALL_DIR="${ZNNSH_INSTALL_DIR:=/usr/local/bin}"
+export ZNNSH_BUILD_SOURCE="${ZNNSH_BUILD_SOURCE:=false}"
+export ZNNSH_BUILD_URL="${ZNNSH_BUILD_URL:=}"
+export ZNNSH_BUILD_BRANCH="${ZNNSH_BUILD_BRANCH:=master}"
+
+
+export ZNNSH_NODE_TYPE="${ZNNSH_NODE_TYPE:="zenon"}"
+export ZNNSH_REPO_URL="${ZNNSH_REPO_URL:="https://github.com/zenon-network/go-zenon.git"}"
+export ZNNSH_BRANCH_NAME="${ZNNSH_BRANCH_NAME:="master"}"
+export ZNNSH_BINARY_NAME="${ZNNSH_BINARY_NAME:="znnd"}"
+export ZNNSH_SERVICE_NAME="${ZNNSH_SERVICE_NAME:="go-zenon"}"
+
 
 declare -A ZNNSH_DEFAULT_NODE_CONFIG=(
   [zenon_repo]="https://github.com/zenon-network/go-zenon.git"
@@ -37,15 +52,12 @@ declare -A ZNNSH_DEFAULT_NODE_CONFIG=(
   [hyperqube_service]="go-hyperqube"
 )
 
-ZNNSH_NODE_TYPE="${ZNNSH_NODE_TYPE:="zenon"}"
-ZNNSH_REPO_URL="${ZNNSH_REPO_URL:="https://github.com/zenon-network/go-zenon.git"}"
-ZNNSH_BRANCH_NAME="${ZNNSH_BRANCH_NAME:="master"}"
-ZNNSH_BINARY_NAME="${ZNNSH_BINARY_NAME:="znnd"}"
-ZNNSH_SERVICE_NAME="${ZNNSH_SERVICE_NAME:="go-zenon"}"
-
 export ZNNSH_DEFAULT_NODE_CONFIG
-export ZNNSH_GUM_URL
-export ZNNSH_GO_URL
+
+
+
+
+
 
 
 

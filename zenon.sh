@@ -9,6 +9,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 ZNNSH_DEPLOYMENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export ZNNSH_DEPLOYMENT_DIR
 
 source "$ZNNSH_DEPLOYMENT_DIR/lib/environment.sh"
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-stop() {
+stop_service() {
     local debug=""
     if [[ "$ZNNSH_DEBUG" = true ]]; then
         debug="--show-output"
@@ -13,3 +13,5 @@ stop() {
 
     success_log "$ZNNSH_SERVICE_NAME service stopped successfully"
 }
+
+export -f stop_service
