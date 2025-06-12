@@ -6,7 +6,7 @@ start_service() {
         debug="--show-output"
     fi
 
-    gum spin --spinner meter --title "Starting $ZNNSH_SERVICE_NAME service..." $debug -- systemctl start "$ZNNSH_SERVICE_NAME" || {
+    gum spin --spinner meter --spinner.foreground 46 --title "Starting $ZNNSH_SERVICE_NAME service..." $debug -- systemctl start "$ZNNSH_SERVICE_NAME" || {
         error_log "Failed to start $ZNNSH_SERVICE_NAME service"
         return 1
     }

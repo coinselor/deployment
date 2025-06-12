@@ -40,7 +40,7 @@ get_branches() {
     
     info_log "Fetching branches from $repo_url"
     
-    branches=$(gum spin --spinner meter --title "Fetching branches..." -- \
+    branches=$(gum spin --spinner meter --spinner.foreground 46 --title "Fetching branches..." -- \
         bash -c "git ls-remote --heads '$repo_url' | awk '{print \$2}' | sed 's|refs/heads/||'")
     
     if [ -z "$branches" ]; then
@@ -171,14 +171,14 @@ clone_and_build() {
         --margin "1 0" \
         "Build Process"
     
-    gum spin --spinner meter --title "Checking for existing ${node_dir} directory..." -- \
+    gum spin --spinner meter --spinner.foreground 46 --title "Checking for existing ${node_dir} directory..." -- \
         rename_existing_dir "${node_dir}" || {
         error_log "Failed to prepare directories"
         return 1
     }
 
     info_log "Cloning branch '$branch' from repository..."
-    gum spin --spinner meter --title "Cloning branch '$branch' from repository..." -- \
+    gum spin --spinner meter --spinner.foreground 46 --title "Cloning branch '$branch' from repository..." -- \
         git clone -b "$branch" "$repo_url" "${node_dir}" || {
         error_log "Failed to clone repository"
         return 1
@@ -264,6 +264,4 @@ modify_hyperqube_config() {
 
 export -f install_dependencies
 export -f install_go
-export -f clone_and_build
-export -f create_service
 export -f modify_hyperqube_config

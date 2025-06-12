@@ -6,7 +6,7 @@ stop_service() {
         debug="--show-output"
     fi
 
-    gum spin --spinner meter --title "Stopping $ZNNSH_SERVICE_NAME service..." $debug -- systemctl stop "$ZNNSH_SERVICE_NAME" || {
+    gum spin --spinner meter --spinner.foreground 46 --title "Stopping $ZNNSH_SERVICE_NAME service..." $debug -- systemctl stop "$ZNNSH_SERVICE_NAME" || {
         error_log "Failed to stop $ZNNSH_SERVICE_NAME service"
         return 1
     }
