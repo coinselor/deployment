@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 show_help() {
-    
+   
     gum style \
-        --foreground 245 \
+        --foreground "245" \
         --padding "1 1" \
         -- "$(cat <<'ASCII'
  _____  _____   _   _    ___    _   _             _
@@ -15,25 +15,26 @@ ASCII
 )"
 
     gum style \
-        --foreground 242 \
-        --align center \
+        --foreground "242" \
+        --align "center" \
         --width 61 \
         "An independent script."
 
-    echo
-
+    local zenon_network_styled
+    zenon_network_styled=$(gum style --foreground "green" --bold "Zenon Network")
     gum style \
-        --foreground "gray" --align center --width 70 --margin "1 0" \
-        "A deployment script to automate the setup and management of Zenon Network infrastructure."
-    
-    echo
-    gum style --foreground "dimgray" "USAGE:"
-    gum style --margin "4 0" "sudo ./zenon.sh [COMMAND] [ARGUMENTS]"
-    echo
-    
-    gum style --foreground "dimgray" "COMMANDS:"
-    
-    local opts=(
+        --foreground "#808080" --align "center" --width 70 --margin "1 0 1 0" \
+        "A deployment script to automate the setup and management of ${zenon_network_styled} infrastructure."
+
+    local usage_title
+    usage_title=$(gum style --foreground "#A9A9A9" "USAGE:")
+    local usage_command
+    usage_command=$(gum style --margin "0 0 0 4" "sudo ./zenon.sh [COMMAND] [ARGUMENTS]")
+    gum join --align "left" --vertical "$usage_title" "$usage_command"
+
+    gum style --foreground "#A9A9A9" --margin "1 0 0 0" "COMMANDS:"
+
+    local commands=(
         "(no commands/arguments)|Show the interactive menu for Zenon Network."
         "hyperqube|Show the interactive menu for HyperQube Network."
         "--deploy [type] [repository] [branch]|Deploy a node. 'type' can be 'zenon' (default) or 'hyperqube'. 'repository' and 'branch' are optional."
@@ -45,11 +46,16 @@ ASCII
         "--analytics|Show analytics dashboard."
         "--help|Display this help message."
     )
-    
-    for opt in "${opts[@]}"; do
-        IFS="|" read -r flag description <<<"$opt"
-        gum style --margin "2 0" "$(gum style --foreground "green" "$flag")"
-        gum style --margin "4 0" --foreground "gray" "$description"
+
+    for cmd_with_desc in "${commands[@]}"; do
+        IFS="|" read -r cmd description <<<"$cmd_with_desc"
+        
+        local styled_cmd
+        styled_cmd=$(gum style --foreground "#00FF00" --width 35 "$cmd")
+        local styled_desc
+        styled_desc=$(gum style --foreground "#808080" "$description")
+
+        gum join --align "left" "$styled_cmd" "$styled_desc"
     done
 }
 
