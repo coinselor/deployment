@@ -20,7 +20,7 @@ ASCII
     gum format --type markdown "**USAGE:**" | gum style --foreground "#00FF00" --margin "0 0 0 0"
     gum format --type markdown "\`sudo ./zenon.sh [COMMAND]\`" | gum style --foreground "#00FF00" --margin "0 0 0 8"
     echo
-    gum style --foreground "#A9A9A9" --margin "0 0 1 9" "- COMMAND can be 'zenon' (default) or 'hyperqube'."
+    gum style --foreground "#A9A9A9" --margin "0 0 1 9" "COMMAND can be 'zenon' (default) or 'hyperqube'."
 
     gum style --foreground "#A9A9A9" "INTERACTIVE COMMANDS:"
     
@@ -35,10 +35,10 @@ ASCII
     gum format --type markdown "**USAGE:**" | gum style --foreground "#00FF00" --margin "0 0 0 0"
     gum format --type markdown "\`sudo ./zenon.sh [COMMAND] [ARGUMENTS]\`" | gum style --foreground "#00FF00" --margin "0 0 0 8"
     
-    local usage_details="- **COMMAND** is a flag prefixed with '--' (e.g., --deploy)
-- **TYPE** can be 'zenon' (default) or 'hyperqube'
-- **REPOSITORY** is an **optional** HTTPS git URL
-- **BRANCH** is an **optional** and case-sensitive git branch name"
+    local usage_details="**COMMAND** is a flag prefixed with '--' (e.g., --deploy)
+**TYPE** can be 'zenon' (default) or 'hyperqube'
+**REPOSITORY** is an **optional** HTTPS git URL
+**BRANCH** is an **optional** and case-sensitive git branch name"
     
     gum format --type markdown "$usage_details" | gum style --foreground "#A9A9A9" --margin "0 0 1 9"
 
