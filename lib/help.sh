@@ -24,16 +24,11 @@ ASCII
 
     gum style --foreground "#A9A9A9" "INTERACTIVE COMMANDS:"
     
-    read -r -d '' interactive_table <<'TABLE'
-| Command | Description |
-|---------|-----------------------------------------------|
-| `zenon` | Show the interactive menu for Zenon Network. |
-| `hyperqube` | Show the interactive menu for HyperQube Network. |
-TABLE
-    
-    gum format --type markdown "$interactive_table"
+    printf "%-12s %s\n" "zenon" "Show the interactive menu for Zenon Network." \
+                         "hyperqube" "Show the interactive menu for HyperQube Network." | \
+        gum style --foreground "#A9A9A9" --margin "0 0 1 0"
 
-    gum style --border "rounded" --foreground "#00FF00" --  border-foreground "#00FF00" --align "center" --width 61 --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
+    gum style --border "rounded" --foreground "#00FF00" --border-foreground "#00FF00" --align "center" --width 61 --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
 
     gum format --type markdown "**USAGE:**" | gum style --foreground "#00FF00" --margin "0 0 0 0"
     gum format --type markdown "\`sudo ./zenon.sh [COMMAND] [ARGUMENTS]\`" | gum style --foreground "#00FF00" --margin "0 0 0 8"
@@ -45,23 +40,17 @@ TABLE
     
     gum format --type markdown "$usage_details" | gum style --foreground "#A9A9A9" --margin "0 0 1 9"
 
-
     gum style --foreground "#A9A9A9" "NON-INTERACTIVE COMMANDS:"
 
-    read -r -d '' non_interactive_table <<'TABLE'
-| Command | Description |
-|------------------------------------------|--------------------------------------------|
-| `--deploy [type] [repository] [branch]` | Deploy a node. |
-| `--restore [type]` | Restore a node from the latest snapshot. |
-| `--restart [type]` | Restart the node service. |
-| `--stop [type]` | Stop the node service. |
-| `--start [type]` | Start the node service. |
-| `--monitor [type]` | Monitor node logs in real-time. |
-| `--analytics` | Show the analytics dashboard. |
-| `--help` | Display this help message. |
-TABLE
-    
-    gum format --type markdown "$non_interactive_table"
+    printf "%-40s %s\n" "--deploy [type] [repository] [branch]" "Deploy a node." \
+                               "--restore [type]" "Restore a node from the latest snapshot." \
+                               "--restart [type]" "Restart the node service." \
+                               "--stop [type]" "Stop the node service." \
+                               "--start [type]" "Start the node service." \
+                               "--monitor [type]" "Monitor node logs in real-time." \
+                               "--analytics" "Show the analytics dashboard." \
+                               "--help" "Display this help message." | \
+        gum style --foreground "#A9A9A9" --margin "0 0 1 0"
 
     gum style --foreground "240" --align "center" --width 61 --margin "1 0" --italic "The Future is Encrypted. Only You Can Decrypt It!"
     gum style --foreground "240" --align "center" --width 61 --margin "0 0" --italic "—Zenon Network"
