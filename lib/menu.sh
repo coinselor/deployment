@@ -70,16 +70,16 @@ ASCII
             deploy
             ;;
         "restart")
-            restart
+            restart_service
             ;;
         "stop")
-            stop
+            stop_service
             ;;
         "start")
-            start
+            start_service
             ;;
         "monitor")
-            monitor
+            monitor_service
             ;;
         "backup")
             backup

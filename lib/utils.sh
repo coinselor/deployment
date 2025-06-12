@@ -40,11 +40,11 @@ verify_checksum() {
 
 stop_node_if_running() {
     if systemctl is-active --quiet "$ZNNSH_SERVICE_NAME"; then
-        echo "Stopping $ZNNSH_SERVICE_NAME service..."
+        info_log "Stopping $ZNNSH_SERVICE_NAME service..."
         systemctl stop "$ZNNSH_SERVICE_NAME"
-        echo "$ZNNSH_SERVICE_NAME service stopped."
+        success_log "$ZNNSH_SERVICE_NAME service stopped"
     else
-        echo "$ZNNSH_SERVICE_NAME service is not running."
+        info_log "$ZNNSH_SERVICE_NAME service is not running"
     fi
 }
 

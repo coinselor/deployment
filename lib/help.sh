@@ -52,3 +52,5 @@ ASCII
         gum style --indent 4 --foreground "gray" "$description"
     done
 }
+
+export -f show_help

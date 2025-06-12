@@ -84,7 +84,7 @@ main() {
             fi
             
             set_node_config "$node_type"
-            restart
+            restart_service
             ;;
             
         --stop)
@@ -97,7 +97,7 @@ main() {
             fi
             
             set_node_config "$node_type"
-            stop
+            stop_service
             ;;
             
         --start)
@@ -110,7 +110,7 @@ main() {
             fi
             
             set_node_config "$node_type"
-            start
+            start_service
             ;;
             
         --monitor)
@@ -123,7 +123,7 @@ main() {
             fi
             
             set_node_config "$node_type"
-            monitor
+            monitor_service
             ;;
             
         --analytics)
@@ -131,11 +131,11 @@ main() {
             ;;
             
         --help)
-            help   
+            show_help   
             ;;
             
         *)
-            help
+            show_help
             ;;
     esac
     
