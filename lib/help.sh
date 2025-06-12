@@ -24,9 +24,10 @@ ASCII
 
     gum style --foreground "#A9A9A9" "INTERACTIVE COMMANDS:"
     
-    local interactive_table="|---------|-------------|
-| \`zenon\` | Show the interactive menu for Zenon Network. |
-| \`hyperqube\` | Show the interactive menu for HyperQube Network. |"
+    local interactive_table="| Command     | Description                                        |
+|-------------|---------------------------------------------------|
+| \`zenon\`     | Show the interactive menu for Zenon Network.      |
+| \`hyperqube\` | Show the interactive menu for HyperQube Network.  |"
     
     gum format --type markdown "$interactive_table" | gum style --margin "0 0 1 0"
 
@@ -45,7 +46,8 @@ ASCII
 
     gum style --foreground "#A9A9A9" "NON-INTERACTIVE COMMANDS:"
 
-    local commands_table="|------------------------------------------|--------------------------------------------|
+    local commands_table="| Command                                  | Description                                |
+|------------------------------------------|--------------------------------------------|
 | \`--deploy [type] [repository] [branch]\`  | Deploy a node.                             |
 | \`--restore [type]\`                       | Restore a node from the latest snapshot.   |
 | \`--restart [type]\`                       | Restart the node service.                  |
@@ -58,7 +60,7 @@ ASCII
     gum format --type markdown "$commands_table" | gum style --margin "0 0 1 0"
 
     gum style --foreground "240" --align "center" --width 61 --margin "1 0" --italic "The Future is Encrypted. Only You Can Decrypt It!"
-    gum style --foreground "240" --align "center" --width 61 --margin "1 0" --italic "—Zenon Network"
+    gum style --foreground "240" --align "center" --width 61 --margin "0 0" --italic "—Zenon Network"
 }
 
 export -f show_help
