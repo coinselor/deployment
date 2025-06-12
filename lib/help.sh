@@ -20,16 +20,15 @@ ASCII
     gum format --type markdown "**USAGE:**" | gum style --foreground "#00FF00" --margin "0 0 0 0"
     gum format --type markdown "\`sudo ./zenon.sh [COMMAND]\`" | gum style --foreground "#00FF00" --margin "0 0 0 8"
     echo
-    gum style --foreground "#A9A9A9" --margin "0 0 1 9" "COMMAND can be 'zenon' (default) or 'hyperqube'."
+    gum style --foreground "#A9A9A9" --margin "0 0 1 10" "COMMAND can be 'zenon' (default) or 'hyperqube'."
 
     gum style --foreground "#A9A9A9" "INTERACTIVE COMMANDS:"
     
-    local interactive_table="| Command     | Description                                        |
-|-------------|---------------------------------------------------|
-| \`zenon\`     | Show the interactive menu for Zenon Network.      |
-| \`hyperqube\` | Show the interactive menu for HyperQube Network.  |"
-    
-    gum format --type markdown "$interactive_table" | gum style --margin "0 0 1 0"
+    printf "%s\n" \
+        $'Command\tDescription' \
+        $'zenon\tShow the interactive menu for Zenon Network.' \
+        $'hyperqube\tShow the interactive menu for HyperQube Network.' | \
+        gum table --separator "\t" | gum style --margin "0 0 1 0"
 
     gum style --border "rounded" --border-foreground "#00FF00" --align "center" --width 61 --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
 
@@ -46,18 +45,17 @@ ASCII
 
     gum style --foreground "#A9A9A9" "NON-INTERACTIVE COMMANDS:"
 
-    local commands_table="| Command                                  | Description                                |
-|------------------------------------------|--------------------------------------------|
-| \`--deploy [type] [repository] [branch]\`  | Deploy a node.                             |
-| \`--restore [type]\`                       | Restore a node from the latest snapshot.   |
-| \`--restart [type]\`                       | Restart the node service.                  |
-| \`--stop [type]\`                          | Stop the node service.                     |
-| \`--start [type]\`                         | Start the node service.                    |
-| \`--monitor [type]\`                       | Monitor node logs in real-time.            |
-| \`--analytics\`                            | Show the analytics dashboard.              |
-| \`--help\`                                 | Display this help message.                 |"
-    
-    gum format --type markdown "$commands_table" | gum style --margin "0 0 1 0"
+    printf "%s\n" \
+        $'Command\tDescription' \
+        $'--deploy [type] [repository] [branch]\tDeploy a node.' \
+        $'--restore [type]\tRestore a node from the latest snapshot.' \
+        $'--restart [type]\tRestart the node service.' \
+        $'--stop [type]\tStop the node service.' \
+        $'--start [type]\tStart the node service.' \
+        $'--monitor [type]\tMonitor node logs in real-time.' \
+        $'--analytics\tShow the analytics dashboard.' \
+        $'--help\tDisplay this help message.' | \
+        gum table --separator "\t" | gum style --margin "0 0 1 0"
 
     gum style --foreground "240" --align "center" --width 61 --margin "1 0" --italic "The Future is Encrypted. Only You Can Decrypt It!"
     gum style --foreground "240" --align "center" --width 61 --margin "0 0" --italic "—Zenon Network"
