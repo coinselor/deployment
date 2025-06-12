@@ -1,57 +1,146 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-trap 'echo "Error: Script failed on line $LINENO" >&2' ERR
+trap 'echo "Error: Script failed on line $LINENO of $BASH_SOURCE" >&2' ERR
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root."
+  exit 1
+fi
 
-. "$PROJECT_ROOT/scripts/config.sh"
-. "$PROJECT_ROOT/scripts/install-gum.sh"
-. "$PROJECT_ROOT/scripts/logging.sh"
-. "$PROJECT_ROOT/scripts/utils.sh"
-. "$PROJECT_ROOT/scripts/menu.sh"
+ZNNSH_DEPLOYMENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [[ $# -eq 0 ]]; then
-	show_menu
-else
-	case "$1" in
-	--deploy)
-		deploy_go_zenon
-		;;
-	--build)
-		BUILD_SOURCE=true
-		if [[ $# -gt 1 ]]; then
-			BUILD_SOURCE_URL="$2"
-		else
-			log_error "Build URL is required for --build option"
-			exit 1
-		fi
-		deploy_go_zenon
-		;;
-	--restore)
-		restore_go_zenon
-		;;
-	--restart)
-		restart_go_zenon
-		;;
-	--stop)
-		stop_go_zenon
-		;;
-	--start)
-		start_go_zenon
-		;;
-	--monitor)
-		monitor_logs
-		;;
-	--analytics)
-		install_grafana
-		;;
-	--help)
-		show_help
-		;;
-	*)
-		show_help
-		exit 1
-		;;
-	esac
+source "$ZNNSH_DEPLOYMENT_DIR/lib/environment.sh"
+
+main() {
+
+    if [[ $# -eq 0 ]]; then
+        show_menu
+        exit 0
+    fi
+
+    if [[ "$1" == "hyperqube" && $# -eq 1 ]]; then
+        set_node_config "hyperqube"
+        show_menu
+        exit 0
+    fi
+
+    export ZNNSH_INTERACTIVE_MODE="false"
+
+
+    case $1 in
+        --deploy)
+            shift
+            local custom_repo
+            local custom_branch
+            local node_type="zenon"
+            
+            if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
+                node_type="$1"
+                shift
+            fi
+            
+            if [[ $# -gt 0 && "$1" != -* ]]; then
+                custom_repo="$1"
+                shift
+                
+                if [[ $# -gt 0 && "$1" != -* ]]; then
+                    custom_branch="$1"
+                    shift
+                fi
+            fi
+            
+            set_node_config "$node_type"
+            if [[ -n "$custom_repo" ]]; then
+                export ZNNSH_REPO_URL="$custom_repo"
+            fi
+            if [[ -n "$custom_branch" ]]; then
+                export ZNNSH_BRANCH_NAME="$custom_branch"
+            fi
+            deploy
+            ;;
+            
+        --restore)
+            shift
+            local node_type="zenon"
+            
+            if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
+                node_type="$1"
+                shift
+            fi
+            
+            set_node_config "$node_type"
+            restore
+            ;;
+            
+        --restart)
+            shift
+            local node_type="zenon"
+            
+            if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
+                node_type="$1"
+                shift
+            fi
+            
+            set_node_config "$node_type"
+            restart
+            ;;
+            
+        --stop)
+            shift
+            local node_type="zenon"
+            
+            if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
+                node_type="$1"
+                shift
+            fi
+            
+            set_node_config "$node_type"
+            stop
+            ;;
+            
+        --start)
+            shift
+            local node_type="zenon"
+            
+            if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
+                node_type="$1"
+                shift
+            fi
+            
+            set_node_config "$node_type"
+            start
+            ;;
+            
+        --monitor)
+            shift
+            local node_type="zenon"
+            
+            if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
+                node_type="$1"
+                shift
+            fi
+            
+            set_node_config "$node_type"
+            monitor
+            ;;
+            
+        --analytics)
+            analytics
+            ;;
+            
+        --help)
+            help   
+            ;;
+            
+        *)
+            help
+            ;;
+    esac
+    
+    exit 0
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
 fi

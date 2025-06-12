@@ -167,7 +167,7 @@ GITHUB_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 # Construct the URL to download the dashboard
 ZNND_DASHBOARD_JSON_URL="https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/dashboards/znnd.json"
 echo "Importing znnd Dashboard from branch ${GITHUB_BRANCH} of repo ${GITHUB_REPO}..."
-curl -s $ZNND_DASHBOARD_JSON_URL -o /tmp/znnd_dashboard.json
+curl -s "$ZNND_DASHBOARD_JSON_URL" -o /tmp/znnd_dashboard.json
 
 # Construct the final API request payload with the dashboard JSON
 cat <<EOF > /tmp/import_znnd_dashboard.json

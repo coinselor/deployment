@@ -1,95 +1,74 @@
-# Zenon Network Setup Script
+# Zenon.sh: An Independent Script
 
-This script automates the setup, management, and restoration of the Zenon Network (`go-zenon`) node. It handles dependencies installation, Go installation, Zenon deployment, and service management. The script also offers additional options for restoring from a bootstrap, monitoring logs, and installing Grafana for visualizing data.
+<!-- Placeholder for a GIF showcasing the interactive menu -->
+<!-- ![Interactive Menu Demo](path/to/your/demo.gif) -->
+
+This script automates the setup, management, and maintenance of Zenon Network (`go-zenon`) and HyperQube (`hyperqube_z`) nodes. It features an interactive menu for ease of use, while also supporting non-interactive operation via command-line flags for automation.
 
 ## Features
 
-- **Automated Go Installation**: Installs Go 1.23.0 (or another version if changed) based on the system architecture.
-- **Automated Zenon Deployment**: Clones the `go-zenon` repository, builds it, and sets it up as a service.
-- **Automated Dependencies Installation**: Installs `make`, `gcc`, and `jq` automatically without user intervention.
-- **Zenon Service Management**: Provides options to stop, start, and restart the `go-zenon` service.
-- **Restore from Bootstrap**: Downloads and runs a script to restore the node from a bootstrap.
-- **Log Monitoring**: Allows you to monitor `znnd` logs in real-time.
-- **Grafana Installation**: Optionally installs Grafana for monitoring Zenon metrics.
-- **Non-Interactive Installations**: Automatically selects default options during package installation to avoid any prompts.
+- **Interactive Menu**: A user-friendly, terminal-based menu for easy navigation and operation.
+- **Dual Node Support**: Deploy, manage, and maintain both Zenon and HyperQube nodes.
+- **Automated Dependencies**: Installs required dependencies like Go, `make`, `gcc`, and `jq` automatically.
+- **Full Node Lifecycle Management**: Provides options to deploy, start, stop, restart, backup, restore, and monitor your node.
+- **Analytics Dashboard**: Includes an option to set up a Grafana dashboard for node monitoring.
+- **Non-Interactive Mode**: Supports command-line flags for all major operations, making it suitable for scripting and automation.
 
 ## Prerequisites
 
-This script assumes you're running a Linux distribution that uses `apt` as a package manager (e.g., Ubuntu or Debian). You need to have `git` installed. You must also have superuser (root) privileges to execute this script.
+- A Linux distribution that uses `apt` (e.g., Ubuntu, Debian).
+- `git` must be installed.
+- Superuser (root) privileges are required.
 
 ## Usage
 
-Clone the script or save it locally, then run it using a bash terminal:
+To get started quickly, you can clone the repository, make the script executable, and run it with a single command:
 
 ```bash
-sudo ./go-zenon.sh [OPTIONS]
+git clone https://github.com/hypercore-one/deployment.git && cd deployment && chmod u+x zenon.sh && sudo ./zenon.sh
 ```
 
-### Options
+Running the script without any arguments (`sudo ./zenon.sh`) will launch the interactive menu with zenon as the default node type.
+To use for hyperqube deployment, run `sudo ./zenon.sh hyperqube`.
 
-- `--deploy`: Deploy and set up the Zenon Network.
-- `--restore`: Restore `go-zenon` from a bootstrap.
-- `--restart`: Restart the `go-zenon` service.
-- `--stop`: Stop the `go-zenon` service.
-- `--start`: Start the `go-zenon` service.
-- `--status`: Monitor `znnd` logs.
-- `--grafana`: Install Grafana for monitoring metrics.
-- `--help`: Display the help message.
+### Non-Interactive Mode (Flags)
 
-### Example Usage
+For automation or direct commands, you can use the following flags. The script can manage either a `zenon` or a `hyperqube` node. If no node type is specified after the flag, it defaults to `zenon`.
 
-#### Deploying Zenon Network
+- `--deploy [zenon|hyperqube] [repo_url] [branch]`: Deploys a node. You can optionally specify the node type and a custom Git repository and branch.
+- `--restart [zenon|hyperqube]`: Restarts the specified node service.
+- `--start [zenon|hyperqube]`: Starts the specified node service.
+- `--stop [zenon|hyperqube]`: Stops the specified node service.
+- `--monitor [zenon|hyperqube]`: Monitors the logs for the specified node.
+- `--backup [zenon|hyperqube]`: Backups the specified node.
+- `--restore [zenon|hyperqube]`: Restores a node from a backup/bootstrap.
+- `--analytics`: Sets up the Grafana analytics dashboard.
+- `--help`: Displays the help message.
 
-To deploy and set up the Zenon Network, run:
+### Non-Interactive Examples
 
+**Deploy a Zenon node:**
 ```bash
-sudo ./go-zenon.sh --deploy
+sudo ./zenon.sh --deploy
 ```
 
-This will:
-- Install required dependencies (`make`, `gcc`, `jq`).
-- Download and install Go.
-- Clone the `go-zenon` repository.
-- Build the project.
-- Set up and enable the `go-zenon` service.
-
-#### Restoring from Bootstrap
-
-To restore from a bootstrap, use:
-
+**Deploy a HyperQube node:**
 ```bash
-sudo ./go-zenon.sh --restore
+sudo ./zenon.sh --deploy hyperqube
 ```
 
-#### Monitoring Logs
-
-To monitor the `znnd` logs, run:
-
+**Deploy a Zenon node from a specific repository and branch (e.g., master):**
 ```bash
-sudo ./go-zenon.sh --status
+sudo ./zenon.sh --deploy zenon https://github.com/zenon-network/go-zenon.git master
 ```
 
-#### Installing Grafana
-
-To install Grafana for visualizing Zenon metrics:
-
+**Deploy a HyperQube node from a specific repository and branch (e.g., master):**
 ```bash
-sudo ./go-zenon.sh --grafana
+sudo ./zenon.sh --deploy hyperqube https://github.com/hypercore-one/hyperqube_z.git master
 ```
-
-### Customizing the Script
-
-You can adjust the Go version or repository URL by modifying the following variables in the script:
-
-- **Go version**: Set in the variable `GO_VERSION`. The default is `1.23.0`.
-- **Repository URL**: By default, it uses `https://github.com/zenon-network/go-zenon.git`. You can input a different URL when prompted, or modify the script to always use a specific repository.
 
 ## Notes
 
 - Ensure you run this script as root or use `sudo` for it to function properly.
 - The script is designed to be non-interactive when installing dependencies, so you won't be prompted to select any options during the installation process.
 - Be cautious when running the script, as it will automatically update and upgrade your system packages during the `apt-get` operations.
-
----
-
-This `README.md` provides an overview of how to use the script, its features, and specific commands for deployment and service management. Let me know if you need any further adjustments!
