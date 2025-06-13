@@ -187,8 +187,7 @@ clone_and_build() {
         fi
         branch=$selected_branch
     else
-        info_log "Using repository: $repo_url"
-        info_log "Using branch: $branch"
+        info_log "Using repository $repo_url with branch $branch"
     fi
 
     gum style \
@@ -201,9 +200,9 @@ clone_and_build() {
         return 1
     }
 
-    info_log "Cloning branch '$branch' from repository..."
     gum spin --spinner meter --spinner.foreground 46 --title "Cloning branch '$branch' from repository..." -- \
-        git clone -b "$branch" "$repo_url" "${node_dir}" || {
+        bash -c "git clone -b '$branch' '$repo_url' '${node_dir}' \
+        >> \"${ZNNSH_LOG_FILE}\" 2>&1" || {
         error_log "Failed to clone repository"
         return 1
     }
@@ -213,22 +212,24 @@ clone_and_build() {
         return 1
     }
 
-    info_log "Building ${ZNNSH_BINARY_NAME}..."
-    gum spin --spinner minidot --title "Building ${ZNNSH_BINARY_NAME}..." -- \
-        env GO111MODULE=on ../go/bin/go build -o "build/${ZNNSH_BINARY_NAME}" "./cmd/${ZNNSH_BINARY_NAME}" || {
+    gum spin --spinner meter --spinner.foreground 46 --title "Building ${ZNNSH_BINARY_NAME}..." -- \
+        bash -c "env GO111MODULE=on ../go/bin/go build -o 'build/${ZNNSH_BINARY_NAME}' './cmd/${ZNNSH_BINARY_NAME}' \
+        >> \"${ZNNSH_LOG_FILE}\" 2>&1" || {
         error_log "Failed to build ${ZNNSH_BINARY_NAME}"
         return 1
     }
 
-    info_log "Installing ${ZNNSH_BINARY_NAME} binary..."
-    gum spin --spinner line --title "Installing ${ZNNSH_BINARY_NAME} binary..." -- \
-        cp "build/${ZNNSH_BINARY_NAME}" "$ZNNSH_INSTALL_DIR/" || {
+    gum spin --spinner meter --spinner.foreground 46 --title "Installing ${ZNNSH_BINARY_NAME} binary..." -- \
+        bash -c "cp 'build/${ZNNSH_BINARY_NAME}' '$ZNNSH_INSTALL_DIR/' \
+        >> \"${ZNNSH_LOG_FILE}\" 2>&1" || {
         error_log "Failed to install ${ZNNSH_BINARY_NAME} binary"
         return 1
     }
 
     success_log "Build completed successfully"
+    echo
     echo '# Welcome Home :alien:' | gum format -t emoji | gum format -t markdown
+    echo
     
     return 0
 }
