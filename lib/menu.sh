@@ -97,6 +97,6 @@ ASCII
 
     if [[ "$choice" != "exit" ]]; then
         echo
-        gum confirm "Return to main menu?" --width 61 --padding "1 1" && show_menu
+        gum confirm "Return to main menu?" && show_menu
     fi
 }
