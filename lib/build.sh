@@ -40,8 +40,11 @@ install_go() {
     fi
 
     info_log "Downloading and installing Go..."
-    curl -fsSLo "go.tar.gz" "$ZNNSH_GO_URL"
-    tar -C "$ZNNSH_DEPLOYMENT_DIR" -xzf "go.tar.gz"
+    curl -fLo "go.tar.gz" --connect-timeout 30 --max-time 300 "$ZNNSH_GO_URL" || {
+        error_log "Failed to download Go from $ZNNSH_GO_URL"
+        return 1
+    }
+    tar -C . -xzf "go.tar.gz"
     rm "go.tar.gz"
     success_log "Go installed successfully."
 }
