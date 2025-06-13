@@ -88,18 +88,15 @@ clone_and_build() {
     local repo_url=${1:-"$ZNNSH_REPO_URL"}
     local branch=${2:-"$ZNNSH_BRANCH_NAME"}
     local node_dir="${ZNNSH_DEFAULT_NODE_CONFIG[${ZNNSH_NODE_TYPE}_service]}"
-    local build_title="BUILD: ${ZNNSH_NODE_TYPE^} Network from Source"
+    local build_title="==== BUILD: ${ZNNSH_NODE_TYPE^} Network from Source ===="
     
     stop_node_if_running
 
     if [ "$ZNNSH_INTERACTIVE_MODE" = true ]; then
 
         gum style \
-            --border "double" \
             --border-foreground 239 \
             --foreground 239 \
-            --width 61 \
-            --align center \
             "$build_title"
         
         if [[ "$ZNNSH_NODE_TYPE" == "zenon" ]]; then
@@ -189,11 +186,6 @@ clone_and_build() {
     else
         info_log "Using repository $repo_url with branch $branch"
     fi
-
-    gum style \
-        --foreground 239 \
-        --margin "1 0" \
-        "BUILD PROCESS"
     
     rename_existing_dir "${node_dir}" || {
         error_log "Failed to prepare directories"
