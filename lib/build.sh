@@ -90,7 +90,7 @@ clone_and_build() {
     local node_dir="${ZNNSH_DEFAULT_NODE_CONFIG[${ZNNSH_NODE_TYPE}_service]}"
     local build_title="==== BUILD: ${ZNNSH_NODE_TYPE^} Network from Source ===="
     
-    stop_node_if_running
+    gum spin --spinner meter --spinner.foreground 46 --title "Stopping $ZNNSH_SERVICE_NAME in case it is running..." -- bash -c "stop_node_if_running"
 
     if [ "$ZNNSH_INTERACTIVE_MODE" = true ]; then
 
