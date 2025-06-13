@@ -12,6 +12,9 @@ export ZNNSH_GUM_VERSION="${ZNNSH_GUM_VERSION:=0.16.1}"
 export ZNNSH_GUM_URL="https://github.com/charmbracelet/gum/releases/download/v${ZNNSH_GUM_VERSION}/gum_${ZNNSH_GUM_VERSION}_${ZNNSH_BUILD_ARCH}.deb"
 export ZNNSH_GUM_LOGS="${ZNNSH_GUM_LOGS:=true}"
 
+export $GUM_LOG_LEVEL_FOREGROUND="#ffffff"
+export $GUM_LOG_LEVEL_BACKGROUND="#0061EB"
+
 
 export ZNNSH_GO_VERSION="${ZNNSH_GO_VERSION:=1.23.0}"
 if [[ "$ZNNSH_HARDWARE_ARCH" == "x86_64" ]]; then

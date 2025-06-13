@@ -81,12 +81,13 @@ select_branch() {
         --header="$(gum style --foreground 242 --padding "1 1" "SELECT A BRANCH:")" \
         --cursor.foreground="46" \
         --selected.foreground="46")
-    
-    if [ -n "$selected_branch" ]; then
-        success_log "You selected branch: $selected_branch"
+    local choose_status=$?
+
+    if [[ $choose_status -ne 0 || -z "$selected_branch" ]]; then
+        error_log "Branch selection cancelled. Aborting."
+        return 1
     else
-        error_log "No branch selected, using default"
-        selected_branch="master"
+        success_log "You selected branch: $selected_branch"
     fi
 }
 
@@ -102,9 +103,12 @@ clone_and_build() {
 
         gum style \
             --border "rounded" \
-            --border-foreground "#00FF00" \
-            --foreground "#00FF00" \
+            --border-foreground "#A9A9A9" \
+            --foreground "#A9A9A9" \
+            --width 70 \
+            --align center \
             --margin "1 0" \
+            --padding "1 1" \
             -- "$build_title"
         
         if [[ "$ZNNSH_NODE_TYPE" == "zenon" ]]; then
@@ -123,7 +127,14 @@ clone_and_build() {
             --header="$(gum style --foreground 242 --padding "1 1" "SELECT A REPOSITORY:")" \
             --cursor.foreground="46" \
             --selected.foreground="46")
-    
+        local repo_choose_status=$?
+
+        if [[ $repo_choose_status -ne 0 || -z "$repo_choice" ]]; then
+            error_log "Repository selection cancelled. Aborting."
+            return 1
+        fi
+
+        local repo_type
         repo_type=$(echo "$repo_choice" | awk -F' →' '{print $1}')
         
         case "$repo_type" in
@@ -158,14 +169,31 @@ clone_and_build() {
                 ;;
         esac
 
-        mapfile -t branches_array < <(get_branches "$repo_url")
+        local all_branches
+        mapfile -t all_branches < <(get_branches "$repo_url")
+        local branches_array=()
+        local has_master=false
+
+        for branch in "${all_branches[@]}"; do
+            if [[ "$branch" == "master" ]]; then
+                has_master=true
+            else
+                branches_array+=("$branch")
+            fi
+        done
+
+        if [[ "$has_master" == true ]]; then
+            branches_array=("master" "${branches_array[@]}")
+        fi
         
         if [ ${#branches_array[@]} -eq 0 ]; then
             error_log "No branches found in repository"
             return 1
         fi
 
-        select_branch "${branches_array[@]}"
+        if ! select_branch "${branches_array[@]}"; then
+            return 1
+        fi
         branch=$selected_branch
     else
         info_log "Using repository: $repo_url"
