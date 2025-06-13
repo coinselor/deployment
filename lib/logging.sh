@@ -30,3 +30,8 @@ success_log() {
         printf "✓ %s\n" "$*"
     fi
 }
+
+export -f error_log
+export -f warn_log
+export -f info_log
+export -f success_log

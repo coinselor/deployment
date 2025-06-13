@@ -28,7 +28,7 @@ ASCII
     printf "%-12s %s\n" "zenon" "Show the interactive menu for Zenon Network." \
                          "hyperqube" "Show the interactive menu for HyperQube Network."
 
-    gum style --border "rounded" --foreground "#A9A9A9" --border-foreground "#A9A9A9" --align "center" --width 61 --padding "0 1" --margin "2 0 1 0" "COMMANDS"
+    gum style --border "rounded" --foreground "#A9A9A9" --border-foreground "#A9A9A9" --align "center" --width 61 --padding "0 1" --margin "2 0 1 0" "NON-INTERACTIVE"
 
     gum style --foreground "#00FF00" "USAGE:"
     gum style --foreground "#00FF00" "sudo ./zenon.sh [COMMAND] [ARGUMENTS]"
