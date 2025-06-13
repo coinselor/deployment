@@ -21,7 +21,7 @@ deploy() {
         return 1
     }
 
-    create_service || {
+    gum spin --spinner meter --spinner.foreground 46 --title "Configuring service..." $debug -- bash -c "create_service" || {
         error_log "Failed to configure service"
         return 1
     }
@@ -39,4 +39,7 @@ deploy() {
     }
 
     success_log "$ZNNSH_SERVICE_NAME service started successfully"
+    echo
+    echo '# Welcome Home :alien:' | gum format -t emoji | gum format -t markdown
+    echo
 }

@@ -128,7 +128,7 @@ clone_and_build() {
         case "$repo_type" in
             "zenon-network")
                 repo_url="${ZNNSH_DEFAULT_NODE_CONFIG[zenon_repo]}"
-                info_log "Selected Zenon Network repository"
+                success_log "You selected repository: Zenon Network"
                 ;;
             "hypercore-one")
                 if [[ "$ZNNSH_NODE_TYPE" == "zenon" ]]; then
@@ -136,7 +136,7 @@ clone_and_build() {
                 else
                     repo_url="${ZNNSH_DEFAULT_NODE_CONFIG[hyperqube_repo]}"
                 fi
-                info_log "Selected Hypercore One repository"
+                success_log "You selected repository: Hypercore One"
                 ;;
             "custom")
                 repo_url=$(gum input \
@@ -219,25 +219,22 @@ clone_and_build() {
     }
 
     success_log "Build completed successfully"
-    echo
-    echo '# Welcome Home :alien:' | gum format -t emoji | gum format -t markdown
-    echo
     
     return 0
 }
 
 create_service() {
-    echo "Checking if $ZNNSH_SERVICE_NAME.service is already set up..."
+    info_log "Checking if $ZNNSH_SERVICE_NAME.service is already set up..."
 
     if systemctl is-active --quiet "$ZNNSH_SERVICE_NAME"; then
-        echo "$ZNNSH_SERVICE_NAME.service is already active. Skipping setup."
+        info_log "$ZNNSH_SERVICE_NAME.service is already active. Skipping setup."
         return
     fi
 
     if [ -e "/etc/systemd/system/$ZNNSH_SERVICE_NAME.service" ]; then
-        echo "$ZNNSH_SERVICE_NAME.service already exists, but it's not active. Setting it up..."
+        info_log "$ZNNSH_SERVICE_NAME.service already exists, but it's not active. Setting it up..."
     else
-        echo "Creating $ZNNSH_SERVICE_NAME.service..."
+        info_log "Creating $ZNNSH_SERVICE_NAME.service..."
         cat << EOF > "/etc/systemd/system/$ZNNSH_SERVICE_NAME.service"
 [Unit]
 Description=$ZNNSH_BINARY_NAME service
@@ -260,7 +257,7 @@ EOF
 
     systemctl daemon-reload
     systemctl enable "$ZNNSH_SERVICE_NAME.service"
-    echo "$ZNNSH_SERVICE_NAME.service is set up."
+    success_log "$ZNNSH_SERVICE_NAME.service is set up."
 }
 
 
@@ -281,4 +278,5 @@ modify_hyperqube_config() {
 
 export -f install_dependencies
 export -f install_go
+export -f create_service
 export -f modify_hyperqube_config
