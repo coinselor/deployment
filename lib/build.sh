@@ -69,14 +69,7 @@ get_branches() {
 
 select_branch() {
     local branches=("$@")
-    
-    gum style \
-        --foreground 245 \
-        --align center \
-        --width 70 \
-        --margin "1 0" \
-        "Branch Selection"
-    
+
     selected_branch=$(printf "%s\n" "${branches[@]}" | gum choose \
         --header="$(gum style --foreground 242 --padding "1 1" "SELECT A BRANCH:")" \
         --cursor.foreground="46" \
@@ -102,14 +95,12 @@ clone_and_build() {
     if [ "$ZNNSH_INTERACTIVE_MODE" = true ]; then
 
         gum style \
-            --border "rounded" \
-            --border-foreground "#A9A9A9" \
-            --foreground "#A9A9A9" \
-            --width 70 \
+            --border "double" \
+            --border-foreground 239 \
+            --foreground 239 \
+            --width 61 \
             --align center \
-            --margin "1 0" \
-            --padding "1 1" \
-            -- "$build_title"
+            "$build_title"
         
         if [[ "$ZNNSH_NODE_TYPE" == "zenon" ]]; then
             repo_options=(
@@ -201,11 +192,9 @@ clone_and_build() {
     fi
 
     gum style \
-        --foreground 242 \
-        --align center \
-        --width 70 \
+        --foreground 239 \
         --margin "1 0" \
-        "Build Process"
+        "BUILD PROCESS"
     
     rename_existing_dir "${node_dir}" || {
         error_log "Failed to prepare directories"
