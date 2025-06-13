@@ -2,7 +2,7 @@
 
 error_log() {
     if [[ "$ZNNSH_GUM_LOGS" == "true" ]]; then
-        gum log --time Kitchen --level error --prefix="zenon.sh:" "$@" >&2
+        gum log --time Kitchen --level error --prefix="Zenon.sh" "$@" >&2
     else
         printf "[ERROR] %s\n" "$*" >&2
     fi
@@ -10,7 +10,7 @@ error_log() {
 
 warn_log() {
     if [[ "$ZNNSH_GUM_LOGS" == "true" ]]; then
-        gum log --time Kitchen --level warn --prefix="zenon.sh:" "$@" >&2
+        gum log --time Kitchen --level warn --prefix="Zenon.sh" "$@" >&2
     else
         printf "[WARN] %s\n" "$*" >&2
     fi
@@ -18,14 +18,14 @@ warn_log() {
 
 info_log() {
     if [[ "$ZNNSH_GUM_LOGS" == "true" ]]; then
-        gum log --time Kitchen --level info --prefix="zenon.sh:" "$@"
+        gum log --time Kitchen --level info --prefix="Zenon.sh" "$@"
     else
         printf "[INFO] %s\n" "$*"
     fi
 }
 success_log() {
     if [[ "$ZNNSH_GUM_LOGS" == "true" ]]; then
-        gum log --time Kitchen --prefix="zenon.sh:" "✓ $*"
+        gum log --time Kitchen --level info --prefix="Zenon.sh" "✓ $*"
     else
         printf "✓ %s\n" "$*"
     fi
