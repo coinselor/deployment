@@ -12,7 +12,7 @@ resync_node() {
     fi
 
     if [[ "${ZNNSH_INTERACTIVE_MODE:-true}" == "true" ]]; then
-        if ! gum confirm "[WARNING]\nThis option will delete all local ${ZNNSH_BINARY_NAME} data and force a full resync from genesis.\nThis is a destructive operation.\nAre you sure you want to continue?"; then
+        if ! gum confirm $'This option will delete all local ${ZNNSH_BINARY_NAME} data and force a full resync from genesis.\nThis is a destructive operation.\nAre you sure you want to continue?\n'; then
             warn_log "Resync cancelled by user"
             return 0
         fi
