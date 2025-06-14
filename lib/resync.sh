@@ -28,20 +28,25 @@ resync_node() {
         }
     fi
 
-    local dirs=("network" "nom" "consensus" "log")
+        local dirs=("network" "nom" "consensus" "log")
+    local removed=0
     for dir in "${dirs[@]}"; do
         local target="$data_dir/$dir"
         if [ -d "$target" ]; then
             rm -rf "$target"
+            ((removed++))
             success_log "Deleted $target"
         else
             info_log "Directory $target does not exist; skipping"
         fi
     done
 
-    success_log "Local data for $ZNNSH_NODE_TYPE erased successfully. The node will resync from genesis on next start."
+    if (( removed > 0 )); then
+        success_log "$removed data director$( [[ $removed -eq 1 ]] && echo 'y' || echo 'ies') removed for $ZNNSH_NODE_TYPE. The node will resync from genesis on next start."
+    else
+        info_log "No data directories needed deletion for $ZNNSH_NODE_TYPE."
+    fi
 
-    # Restore original service state
     if [[ "$was_active" == "true" ]]; then
         info_log "Restarting $ZNNSH_SERVICE_NAME service…"
         start_service || {
