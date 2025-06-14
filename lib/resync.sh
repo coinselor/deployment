@@ -36,7 +36,7 @@ resync_node() {
         if [ -d "$target" ]; then
             rm -rf "$target"
             success_log "Deleted $target"
-            ((deleted_count++))
+            deleted_count=$((deleted_count + 1))
         else
             info_log "Directory $target does not exist; skipping"
         fi
