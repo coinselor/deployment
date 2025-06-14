@@ -3,9 +3,9 @@
 resync_node() {
     local data_dir
     if [[ "$ZNNSH_NODE_TYPE" == "zenon" ]]; then
-        data_dir="${ZNNSH_ZNN_DIR:-$HOME/.znn}"
+        data_dir="${ZNNSH_ZNN_DIR:-/root/.znn}"
     elif [[ "$ZNNSH_NODE_TYPE" == "hyperqube" ]]; then
-        data_dir="${ZNNSH_HQZD_DIR:-$HOME/.hqzd}"
+        data_dir="${ZNNSH_HQZD_DIR:-/root/.hqzd}"
     else
         error_log "Unknown node type: $ZNNSH_NODE_TYPE"
         return 1
