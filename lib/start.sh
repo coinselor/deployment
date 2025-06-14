@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 start_service() {
-    if ! systemctl list-unit-files --type=service | grep -q "^${ZNNSH_SERVICE_NAME}\.service"; then
-        error_log "$ZNNSH_SERVICE_NAME service is not installed (unit file missing)"
-        return 1
+    if ! systemctl status "$ZNNSH_SERVICE_NAME" &>/dev/null; then
+        [[ $? -eq 4 ]] && { error_log "$ZNNSH_SERVICE_NAME service does not exist"; return 1; }
     fi
 
     if systemctl is-active --quiet "$ZNNSH_SERVICE_NAME"; then

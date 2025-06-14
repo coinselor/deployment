@@ -28,7 +28,7 @@ resync_node() {
         }
     fi
 
-        local dirs=("network" "nom" "consensus" "log")
+    local dirs=("network" "nom" "consensus" "log")
     local removed=0
     for dir in "${dirs[@]}"; do
         local target="$data_dir/$dir"
