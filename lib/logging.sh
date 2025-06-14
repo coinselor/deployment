@@ -31,7 +31,4 @@ success_log() {
     fi
 }
 
-export -f error_log
-export -f warn_log
-export -f info_log
-export -f success_log
+export -f error_log warn_log info_log success_log

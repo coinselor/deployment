@@ -16,5 +16,13 @@ source "$ZNNSH_LIB_DIR/restart.sh"
 source "$ZNNSH_LIB_DIR/resync.sh"
 source "$ZNNSH_LIB_DIR/monitor.sh"
 source "$ZNNSH_LIB_DIR/deploy.sh"
+source "$ZNNSH_LIB_DIR/preflight.sh"
 
-
+if gum spin --spinner meter --spinner.foreground 46 \
+        --title "Initiating Spacecraft pre-flight checks..." \
+        -- bash -c "run_preflight"; then
+    success_log "Pre-flight checks complete. Systems nominal. Go for launch."
+else
+    error_log "Failed to run pre-flight checks"
+    return 1
+fi
