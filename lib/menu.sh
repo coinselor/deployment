@@ -50,6 +50,7 @@ ASCII
         "stop → Stop the $service_name service"
         "start → Start the $service_name service"
         "monitor → View $binary_name logs in real-time"
+        "resync → Resync the $binary_name node"
         "backup → Backup $binary_name data"
         "restore → Restore $network_name_short from bootstrap"
         "analytics → Set up a Grafana dashboard"
@@ -80,6 +81,9 @@ ASCII
             ;;
         "monitor")
             monitor_service
+            ;;
+        "resync")
+            resync_node
             ;;
         "backup")
             backup

@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 stop_service() {
-    local debug=""
-    if [[ "$ZNNSH_DEBUG" = true ]]; then
-        debug="--show-output"
+    if ! systemctl is-active --quiet "$ZNNSH_SERVICE_NAME"; then
+        info_log "$ZNNSH_SERVICE_NAME service is not running"
+        return 0
     fi
 
-    gum spin --spinner meter --spinner.foreground 46 --title "Stopping $ZNNSH_SERVICE_NAME service..." $debug -- systemctl stop "$ZNNSH_SERVICE_NAME" || {
+    if systemctl stop "$ZNNSH_SERVICE_NAME"; then
+        success_log "$ZNNSH_SERVICE_NAME service stopped successfully"
+    else
         error_log "Failed to stop $ZNNSH_SERVICE_NAME service"
         return 1
-    }
-
-    success_log "$ZNNSH_SERVICE_NAME service stopped successfully"
+    fi
 }
 
 export -f stop_service

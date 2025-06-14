@@ -12,6 +12,8 @@ source "$ZNNSH_LIB_DIR/help.sh"
 source "$ZNNSH_LIB_DIR/build.sh"
 source "$ZNNSH_LIB_DIR/start.sh"
 source "$ZNNSH_LIB_DIR/stop.sh"
+source "$ZNNSH_LIB_DIR/restart.sh"
+source "$ZNNSH_LIB_DIR/resync.sh"
 source "$ZNNSH_LIB_DIR/monitor.sh"
 source "$ZNNSH_LIB_DIR/deploy.sh"
 

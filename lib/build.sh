@@ -1,23 +1,20 @@
 #!/usr/bin/env bash
 
 install_dependencies() {
-    echo "Installing dependencies..."
+    info_log "Installing dependencies..."
 
     if ! command -v make &> /dev/null; then
-        echo "make could not be found"
-        echo "Installing make..."
+        info_log "Make could not be found. Installing make..."
         apt install -y make
     fi
 
     if ! command -v gcc &> /dev/null; then
-        echo "gcc could not be found"
-        echo "Installing gcc..."
+        info_log "gcc could not be found. Installing gcc..."
         apt install -y gcc
     fi
 
     if ! command -v jq &> /dev/null; then
-        echo "jq could not be found"
-        echo "Installing jq..."
+        info_log "jq could not be found. Installing jq..."
         apt install -y jq
     fi
 }

@@ -48,6 +48,7 @@ ASCII
                                "--stop [type]" "Stop the node service." \
                                "--start [type]" "Start the node service." \
                                "--monitor [type]" "Monitor node logs in real-time." \
+                               "--resync [type]" "Resync the node from genesis." \
                                "--analytics" "Show the analytics dashboard." \
                                "--help" "Display this help message."
 

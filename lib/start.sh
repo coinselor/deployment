@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 start_service() {
-    local debug=""
-    if [[ "$ZNNSH_DEBUG" = true ]]; then
-        debug="--show-output"
+    if systemctl is-active --quiet "$ZNNSH_SERVICE_NAME"; then
+        info_log "$ZNNSH_SERVICE_NAME service is already running"
+        return 0
     fi
 
-    gum spin --spinner meter --spinner.foreground 46 --title "Starting $ZNNSH_SERVICE_NAME service..." $debug -- systemctl start "$ZNNSH_SERVICE_NAME" || {
+    if systemctl start "$ZNNSH_SERVICE_NAME"; then
+        success_log "$ZNNSH_SERVICE_NAME service started successfully"
+    else
         error_log "Failed to start $ZNNSH_SERVICE_NAME service"
         return 1
-    }
-
-    success_log "$ZNNSH_SERVICE_NAME service started successfully"
+    fi
 }
 
 export -f start_service
