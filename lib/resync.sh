@@ -29,22 +29,23 @@ resync_node() {
     fi
 
     local dirs=("network" "nom" "consensus" "log")
-    local removed=0
+    local deleted_count=0
+    
     for dir in "${dirs[@]}"; do
         local target="$data_dir/$dir"
         if [ -d "$target" ]; then
             rm -rf "$target"
-            ((removed++))
             success_log "Deleted $target"
+            ((deleted_count++))
         else
             info_log "Directory $target does not exist; skipping"
         fi
     done
 
-    if (( removed > 0 )); then
-        success_log "$removed data director$( [[ $removed -eq 1 ]] && echo 'y' || echo 'ies') removed for $ZNNSH_NODE_TYPE. The node will resync from genesis on next start."
+    if [[ $deleted_count -gt 0 ]]; then
+        success_log "Local data for $ZNNSH_NODE_TYPE erased successfully ($deleted_count directories deleted). The node will resync from genesis on next start."
     else
-        info_log "No data directories needed deletion for $ZNNSH_NODE_TYPE."
+        info_log "No local data found for $ZNNSH_NODE_TYPE. The node will resync from genesis on next start."
     fi
 
     if [[ "$was_active" == "true" ]]; then
