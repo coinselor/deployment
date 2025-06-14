@@ -54,14 +54,33 @@ verify_ntp() {
     fi
 }
 
+verify_internet() {
+    local connected=false
+    if ping -c1 -W2 1.1.1.1 >/dev/null 2>&1; then
+        connected=true
+    elif curl -fsSL --max-time 5 https://www.google.com/generate_204 >/dev/null; then
+        connected=true
+    fi
+
+    if ! $connected; then
+        error_log "No outbound Internet connectivity detected"
+        return 1
+    fi
+
+    success_log "Internet connectivity"
+}
+
 run_preflight() {
+    gum style \
+        --border-foreground 239 \
+        --foreground 239 \
+        "==== PRE-FLIGHT CHECKS ===="
     info_log "Running pre-flight checks…"
 
     verify_cpu || exit 1
     verify_memory || exit 1
     verify_ntp || exit 1
-
-    success_log "All pre-flight checks passed. Continuing…"
+    verify_internet || exit 1
 }
 
-export -f verify_cpu verify_memory verify_ntp run_preflight
+export -f verify_cpu verify_memory verify_ntp verify_internet run_preflight

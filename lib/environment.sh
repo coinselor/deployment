@@ -20,6 +20,7 @@ source "$ZNNSH_LIB_DIR/preflight.sh"
 
 if gum spin --spinner meter --spinner.foreground 46 \
         --title "Initiating Spacecraft pre-flight checks..." \
+        --show-output \
         -- bash -c "run_preflight"; then
     success_log "Pre-flight checks complete. Systems nominal. Go for launch."
 else
