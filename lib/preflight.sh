@@ -75,7 +75,6 @@ run_preflight() {
         --border-foreground 239 \
         --foreground 239 \
         "==== PRE-FLIGHT CHECKS ===="
-    info_log "Running pre-flight checks…"
 
     verify_cpu || exit 1
     verify_memory || exit 1
