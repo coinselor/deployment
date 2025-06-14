@@ -2,7 +2,8 @@
 
 monitor_service() {
     if ! systemctl is-active --quiet "$ZNNSH_SERVICE_NAME"; then
-        warn_log "$ZNNSH_SERVICE_NAME service is not running. Nothing to monitor."
+        warn_log "$ZNNSH_SERVICE_NAME service is not running. Showing last 20 log lines:"
+        journalctl -u "$ZNNSH_SERVICE_NAME.service" -n 20 --no-pager
         return 0
     fi
 
