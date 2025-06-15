@@ -2,32 +2,32 @@
 
 error_log() {
     if [[ "$ZNNSH_GUM_LOGS" == "true" ]]; then
-        gum log --time Kitchen --level error --prefix="Zenon.sh" "$@" |& tee -a "$ZNNSH_LOG_FILE" >&2
+        gum log --time Kitchen --level error --prefix="Zenon.sh" "$@" 2> >(tee -a "$ZNNSH_LOG_FILE" >&2)
     else
-        printf "[ERROR] %s\n" "$*" |& tee -a "$ZNNSH_LOG_FILE" >&2
+        printf "[ERROR] %s\n" "$*" | tee -a "$ZNNSH_LOG_FILE" >&2
     fi
 }
 
 warn_log() {
     if [[ "$ZNNSH_GUM_LOGS" == "true" ]]; then
-        gum log --time Kitchen --level warn --prefix="Zenon.sh" "$@" |& tee -a "$ZNNSH_LOG_FILE" >&2
+        gum log --time Kitchen --level warn --prefix="Zenon.sh" "$@" 2> >(tee -a "$ZNNSH_LOG_FILE" >&2)
     else
-        printf "[WARN] %s\n" "$*" |& tee -a "$ZNNSH_LOG_FILE" >&2
+        printf "[WARN] %s\n" "$*" | tee -a "$ZNNSH_LOG_FILE" >&2
     fi
 }
 
 info_log() {
     if [[ "$ZNNSH_GUM_LOGS" == "true" ]]; then
-        gum log --time Kitchen --level info --prefix="Zenon.sh" "$@" |& tee -a "$ZNNSH_LOG_FILE"
+        gum log --time Kitchen --level info --prefix="Zenon.sh" "$@" 2> >(tee -a "$ZNNSH_LOG_FILE" >&2)
     else
-        printf "[INFO] %s\n" "$*" |& tee -a "$ZNNSH_LOG_FILE"
+        printf "[INFO] %s\n" "$*" | tee -a "$ZNNSH_LOG_FILE"
     fi
 }
 success_log() {
     if [[ "$ZNNSH_GUM_LOGS" == "true" ]]; then
-        gum log --time Kitchen --level info --prefix="Zenon.sh" "✓ $*" |& tee -a "$ZNNSH_LOG_FILE"
+        gum log --time Kitchen --level info --prefix="Zenon.sh" "✓ $*" 2> >(tee -a "$ZNNSH_LOG_FILE" >&2)
     else
-        printf "✓ %s\n" "$*" |& tee -a "$ZNNSH_LOG_FILE"
+        printf "✓ %s\n" "$*" | tee -a "$ZNNSH_LOG_FILE"
     fi
 }
 
