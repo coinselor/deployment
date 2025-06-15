@@ -313,6 +313,45 @@ import_default_dashboards() {
         info_log "Node Exporter dashboard already exists – skipping."
     fi
 
+    if [[ "$ZNNSH_NODE_TYPE" == "hyperqube" && ! $(dashboard_exists "HQZD Dashboard") ]]; then
+        local hqzd_local=""
+        if [[ -n "$ZNNSH_DEPLOYMENT_DIR" && -f "$ZNNSH_DEPLOYMENT_DIR/dashboards/hqzd.json" ]]; then
+            hqzd_local="$ZNNSH_DEPLOYMENT_DIR/dashboards/hqzd.json"
+        fi
+        if [[ -z "$hqzd_local" ]]; then
+            local script_dir
+            script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+            if [[ -f "$script_dir/../dashboards/hqzd.json" ]]; then
+                hqzd_local="$script_dir/../dashboards/hqzd.json"
+            fi
+        fi
+
+        if [[ -n "$hqzd_local" ]]; then
+            info_log "Importing local hqzd dashboard from $hqzd_local"
+            local hqzd_payload="/tmp/import_hqzd_dashboard.json"
+            cat <<EOF > "$hqzd_payload"
+{
+  "dashboard": $(cat "$hqzd_local"),
+  "folderId": 0,
+  "overwrite": true,
+  "inputs": [{
+    "name": "DS_YESOREYERAM-INFINITY-DATASOURCE",
+    "type": "datasource",
+    "pluginId": "yesoreyeram-infinity-datasource",
+    "value": "yesoreyeram-infinity-datasource"
+  }]
+}
+EOF
+            curl -fsS -X POST -H "Content-Type: application/json" \
+              -u "$ZNNSH_GRAFANA_ADMIN_USER:$ZNNSH_GRAFANA_ADMIN_PASSWORD" \
+              -d "@$hqzd_payload" \
+              http://localhost:3000/api/dashboards/import >/dev/null 2>&1 && \
+              success_log "HQZD dashboard imported successfully from local copy." || \
+              warn_log "Failed to import local hqzd dashboard"
+            rm -f "$hqzd_payload"
+        fi
+    fi
+
     if ! dashboard_exists "ZNND Dashboard"; then
         local znnd_local=""
         if [[ -n "$ZNNSH_DEPLOYMENT_DIR" && -f "$ZNNSH_DEPLOYMENT_DIR/dashboards/znnd.json" ]]; then
@@ -359,15 +398,29 @@ EOF
         GITHUB_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
         
         if [[ -n "$GITHUB_REPO" ]] && [[ -n "$GITHUB_BRANCH" ]]; then
-            local znnd_url="https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/dashboards/znnd.json"
-            local tmp_znnd=/tmp/znnd_dashboard.json
+            local node_dash_url="https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/dashboards/${dashboard_json}"
+            local tmp_node_dash=/tmp/${dashboard_json}
 
-            if ! dashboard_exists "ZNND Dashboard"; then
-                if curl -fsSL "$znnd_url" -o "$tmp_znnd" 2>/dev/null; then
+            # Determine node-specific dashboard variables
+            local dashboard_title
+            local dashboard_json
+            if [[ "$ZNNSH_NODE_TYPE" == "hyperqube" ]]; then
+                dashboard_title="HQZD Dashboard"
+                dashboard_json="hqzd.json"
+            else
+                dashboard_title="ZNND Dashboard"
+                dashboard_json="znnd.json"
+            fi
+
+            local node_dash_url="https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/dashboards/${dashboard_json}"
+            local tmp_node_dash="/tmp/${dashboard_json}"
+
+            if ! dashboard_exists "$dashboard_title"; then
+                if curl -fsSL "$node_dash_url" -o "$tmp_node_dash" 2>/dev/null; then
                     local znnd_payload="/tmp/import_znnd_dashboard.json"
                     cat <<EOF > "$znnd_payload"
 {
-  "dashboard": $(cat "$tmp_znnd"),
+  "dashboard": $(cat "$tmp_node_dash"),
   "folderId": 0,
   "overwrite": true,
   "inputs": [{
@@ -382,14 +435,14 @@ EOF
                       -u "$ZNNSH_GRAFANA_ADMIN_USER:$ZNNSH_GRAFANA_ADMIN_PASSWORD" \
                       -d "@$znnd_payload" \
                       http://localhost:3000/api/dashboards/import >/dev/null 2>&1 && \
-                      success_log "ZNND dashboard imported successfully." || \
-                      warn_log "Failed to import znnd dashboard"
+                      success_log "$dashboard_title imported successfully." || \
+                      warn_log "Failed to import $dashboard_title"
                     rm -f "$znnd_payload"
                 else
-                    info_log "znnd dashboard not found at $znnd_url – skipping."
+                    info_log "Dashboard not found at $node_dash_url – skipping."
                 fi
             else
-                info_log "ZNND dashboard already exists – skipping."
+                info_log "$dashboard_title already exists – skipping."
             fi
         else
             info_log "Could not determine git repository info – skipping znnd dashboard."

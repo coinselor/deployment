@@ -140,6 +140,13 @@ main() {
             ;;
             
         --analytics)
+            shift
+            local node_type="zenon"
+            if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
+                node_type="$1"
+                shift
+            fi
+            set_node_config "$node_type"
             analytics
             ;;
             
