@@ -260,9 +260,9 @@ dashboard_exists() {
         http://localhost:3000/api/search 2>/dev/null)
     
     if [[ -n "$search_result" ]] && [[ "$search_result" != "[]" ]]; then
-        return 0  # Dashboard exists
+        return 0
     else
-        return 1  # Dashboard doesn't exist
+        return 1
     fi
 }
 
@@ -401,7 +401,6 @@ EOF
             local node_dash_url="https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/dashboards/${dashboard_json}"
             local tmp_node_dash=/tmp/${dashboard_json}
 
-            # Determine node-specific dashboard variables
             local dashboard_title
             local dashboard_json
             if [[ "$ZNNSH_NODE_TYPE" == "hyperqube" ]]; then

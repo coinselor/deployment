@@ -86,10 +86,10 @@ ASCII
             resync_node
             ;;
         "backup")
-            backup
+            backup_node
             ;;
         "restore")
-            restore
+            restore_node
             ;;
         "analytics")
             analytics

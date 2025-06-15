@@ -1,36 +1,86 @@
 #!/usr/bin/env bash
 
-# TODO
+RESTORE_DIR="$ZNNSH_BACKUP_DIR/restore"
+FOLDERS=("nom" "network" "consensus" "cache")
 
-# [ -z "$PROJECT_ROOT" ] && echo "Error: config.sh not sourced." && exit 1
-# . "$SCRIPT_DIR/logging.sh"
+restore_node() {
+    local service="$ZNNSH_SERVICE_NAME"
+    local node_dir
+    if [[ "${ZNNSH_NODE_TYPE}" == "hyperqube" ]]; then
+        node_dir="/root/.hqzd"
+    else
+        node_dir="/root/.znn"
+    fi
 
-# restore_go_zenon() {
-#     local restore_script="go-zenon_restore.sh"
-#     local restore_url="https://gist.githubusercontent.com/0x3639/05c6e2ba6b7f0c2a502a6bb4da6f4746/raw/ff4343433b31a6c85020c887256c0fd3e18f01d9/restore.sh"
+    mkdir -p "$RESTORE_DIR"
 
-#     gum spin --spinner dot --title "Downloading restore script..." -- \
-#         wget -O "$restore_script" "$restore_url" || {
-#         error_log "Failed to download restore script"
-#         return 1
-#     }
+    local backup_file="${1:-}"
 
-#     gum spin --spinner dot --title "Setting execute permissions..." -- \
-#         chmod +x "$restore_script" || {
-#         error_log "Failed to set execute permissions"
-#         rm -f "$restore_script"
-#         return 1
-#     }
+    if [[ -z "$backup_file" ]]; then
 
-#     gum spin --spinner dot --title "Running restore script..." -- \
-#         ./"$restore_script" || {
-#         error_log "Restore script failed"
-#         rm -f "$restore_script"
-#         return 1
-#     }
+        if [[ "${ZNNSH_INTERACTIVE_MODE:-true}" == "true" ]]; then
+            
+            local -a files
+            mapfile -t -d '' files < <(find "$ZNNSH_BACKUP_DIR" -maxdepth 1 -type f -name "${service}_backup_*.tar.gz" \
+                -printf '%T@ %p\0' | sort -znr | head -z -n 50 | cut -z -d' ' -f2-)
+            if (( ${#files[@]} == 0 )); then
+                error_log "No backups found for $service in $ZNNSH_BACKUP_DIR"
+                return 1
+            fi
+            
+            local choices=""
+            for f in "${files[@]}"; do
+                choices+="$(basename "${f%.tar.gz}")\n"
+            done
+            local chosen
+            chosen=$(printf "%b" "$choices" | gum choose --height 15 --cursor.foreground 46 --header "Select backup to restore") || { error_log "No selection"; return 1; }
+            backup_file="$ZNNSH_BACKUP_DIR/${chosen}.tar.gz"
+        else
+            error_log "--backup-file <filename> required in non-interactive mode"
+            return 1
+        fi
+    else
+        if [[ "$backup_file" != *.tar.gz ]]; then
+            backup_file="$ZNNSH_BACKUP_DIR/${backup_file}.tar.gz"
+        fi
+    fi
 
-#     gum spin --spinner dot --title "Cleaning up temporary files..." -- \
-#         rm -f "$restore_script"
+    if [[ ! -f "$backup_file" ]]; then
+        error_log "Backup file $backup_file not found"
+        return 1
+    fi
 
-#     success_log "go-zenon restored from bootstrap"
-# }
+    local hash_file="${backup_file%.tar.gz}.hash"
+    if [[ ! -f "$hash_file" ]]; then
+        error_log "Hash file missing for $backup_file"
+        return 1
+    fi
+
+    info_log "Verifying backup integrity…"
+    local calculated stored
+    calculated=$(sha256sum "$backup_file" | awk '{print $1}')
+    stored=$(cat "$hash_file")
+    if [[ "$calculated" != "$stored" ]]; then
+        error_log "Integrity check failed for $backup_file"
+        return 1
+    fi
+
+    stop_service "$service"
+
+    info_log "Backing up existing node directory (safety snapshot)"
+    for folder in "${FOLDERS[@]}"; do
+        if [[ -d "$node_dir/$folder" ]]; then
+            mv "$node_dir/$folder" "$RESTORE_DIR/${folder}.bak.$(date +%s)" || warn_log "Failed to move $folder"
+        fi
+    done
+
+    info_log "Extracting backup…"
+    mkdir -p "$node_dir"
+    tar -xzf "$backup_file" -C "$node_dir"
+
+    success_log "${ZNNSH_SERVICE_NAME} data restored successfully."
+
+    start_service "$service"
+}
+
+export -f restore_node

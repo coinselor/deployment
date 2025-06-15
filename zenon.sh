@@ -61,17 +61,61 @@ main() {
             deploy
             ;;
             
+        --backup)
+            shift
+            local node_type="zenon"
+            local max_backups=""
+            local cadence=""
+            local backup_hour=""
+
+            if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
+                node_type="$1"
+                shift
+            fi
+
+            while [[ $# -gt 0 ]]; do
+                case "$1" in
+                    --max-backups)
+                        max_backups="$2"; shift 2;;
+                    --cadence)
+                        cadence="$2"; shift 2;;
+                    --backup-hour)
+                        backup_hour="$2"; shift 2;;
+                    *) break;;
+                esac
+            done
+
+            set_node_config "$node_type"
+            [[ -n "$max_backups" ]] && export ZNNSH_MAX_BACKUPS="$max_backups"
+            [[ -n "$cadence" ]] && export ZNNSH_BACKUP_CADENCE_DAYS="$cadence"
+            [[ -n "$backup_hour" ]] && export ZNNSH_BACKUP_HOUR="$backup_hour"
+            backup_node
+            ;;
+
         --restore)
             shift
             local node_type="zenon"
+            local backup_arg=""
             
             if [[ $# -gt 0 && ("$1" == "zenon" || "$1" == "hyperqube") ]]; then
                 node_type="$1"
                 shift
             fi
             
+            while [[ $# -gt 0 ]]; do
+                case "$1" in
+                    --backup-file)
+                        backup_arg="$2"; shift 2;;
+                    *) break;;
+                esac
+            done
+            
             set_node_config "$node_type"
-            restore
+            if [[ -n "$backup_arg" ]]; then
+                restore_node "$backup_arg"
+            else
+                restore_node
+            fi
             ;;
             
         --restart)

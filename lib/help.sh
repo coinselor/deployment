@@ -43,7 +43,8 @@ ASCII
     gum style --foreground "#A9A9A9" "COMMANDS:"
 
     printf "%-40s %s\n" "--deploy [type] [repository] [branch]" "Deploy a node." \
-                               "--restore [type]" "Restore a node from the latest snapshot." \
+                               "--backup [type] [--max-backups N] [--cadence D] [--backup-hour H]" "Create a snapshot." \
+                               "--restore [type] [--backup-file FILE]" "Restore from a snapshot." \
                                "--restart [type]" "Restart the node service." \
                                "--stop [type]" "Stop the node service." \
                                "--start [type]" "Start the node service." \
