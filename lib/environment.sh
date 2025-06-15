@@ -16,6 +16,8 @@ source "$ZNNSH_LIB_DIR/restart.sh"
 source "$ZNNSH_LIB_DIR/resync.sh"
 source "$ZNNSH_LIB_DIR/monitor.sh"
 source "$ZNNSH_LIB_DIR/deploy.sh"
+source "$ZNNSH_LIB_DIR/grafana.sh"
+source "$ZNNSH_LIB_DIR/analytics.sh"
 source "$ZNNSH_LIB_DIR/preflight.sh"
 
 if gum spin --spinner meter --spinner.foreground 46 \
