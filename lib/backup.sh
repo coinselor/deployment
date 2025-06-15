@@ -85,7 +85,7 @@ backup_node() {
         if gum confirm "Would you like to set up scheduled backups?"; then
 
             local input_max cadence_choice days hour_input
-            input_max=$(gum input --placeholder "$ZNNSH_MAX_BACKUPS" --prompt "Max backups to keep (1-30) ➜ " || echo "")
+            input_max=$(gum input --placeholder "$ZNNSH_MAX_BACKUPS" --prompt "Max backups to keep (1-30) ➜ " --header="$(gum style --foreground 242 --padding "1 1" "INPUT A NUMBER BETWEEN 1 AND 30:")" || echo "")
             if [[ -n "$input_max" && "$input_max" =~ ^[1-9][0-9]?$ && "$input_max" -le 30 ]]; then
                 ZNNSH_MAX_BACKUPS="$input_max"
             fi
@@ -95,7 +95,7 @@ backup_node() {
               daily)  ZNNSH_BACKUP_CADENCE_DAYS=1;;
               weekly) ZNNSH_BACKUP_CADENCE_DAYS=7;;
               custom)
-                  days=$(gum input --placeholder "3" --prompt "Number of days between backups (1-365) ➜ " || echo "")
+                  days=$(gum input --placeholder "3" --prompt "Number of days between backups (1-365) ➜ " --header="$(gum style --foreground 242 --padding "1 1" "INPUT A NUMBER BETWEEN 1 AND 365:")" || echo "")
                   if [[ "$days" =~ ^[1-9][0-9]*$ && "$days" -le 365 ]]; then
                      ZNNSH_BACKUP_CADENCE_DAYS="$days"
                   else

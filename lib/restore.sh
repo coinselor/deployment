@@ -33,7 +33,9 @@ restore_node() {
                 choices+="$(basename "${f%.tar.gz}")\n"
             done
             local chosen
-            chosen=$(printf "%b" "$choices" | gum choose --height 15 --cursor.foreground 46 --header "Select backup to restore") || { error_log "No selection"; return 1; }
+            chosen=$(printf "%b" "$choices" | gum choose --height 15 --cursor.foreground 46 \
+                --header="$(gum style --foreground 242 --padding "1 1" "SELECT BACKUP TO RESTORE:")") \
+                || { error_log "No selection"; return 1; }
             backup_file="$ZNNSH_BACKUP_DIR/${chosen}.tar.gz"
         else
             error_log "--backup-file <filename> required in non-interactive mode"
@@ -74,9 +76,8 @@ restore_node() {
         fi
     done
 
-    info_log "Extracting backup…"
     mkdir -p "$node_dir"
-    tar -xzf "$backup_file" -C "$node_dir"
+    gum spin --spinner meter --spinner.foreground 46 --title "Extracting backup…" -- tar -xzf "$backup_file" -C "$node_dir"
 
     success_log "${ZNNSH_SERVICE_NAME} data restored successfully."
 
