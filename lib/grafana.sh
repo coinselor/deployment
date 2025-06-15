@@ -352,7 +352,7 @@ EOF
         fi
     fi
 
-    if ! dashboard_exists "ZNND Dashboard"; then
+    if [[ "$ZNNSH_NODE_TYPE" == "zenon" ]] && ! dashboard_exists "ZNND Dashboard"; then
         local znnd_local=""
         if [[ -n "$ZNNSH_DEPLOYMENT_DIR" && -f "$ZNNSH_DEPLOYMENT_DIR/dashboards/znnd.json" ]]; then
             znnd_local="$ZNNSH_DEPLOYMENT_DIR/dashboards/znnd.json"
