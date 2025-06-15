@@ -259,19 +259,58 @@ EOF
 
 
 modify_hyperqube_config() {
-    local config_file="/root/.hqzd/config.json"
-    
-    if [ ! -f "$config_file" ]; then
-        echo "The config.json file does not exist. You should create it."
-        return 1
+    local hq_dir="${ZNNSH_HQZD_DIR:-/root/.hqzd}"
+    local genesis_url="${ZNNSH_HQZD_GENESIS_URL:-https://gist.githubusercontent.com/georgezgeorgez/32edacf2681d7491169342cd8c698cdb/raw/f02295d4616f09b6cf606e0306fa501ad09856ba/genesis.json}"
+    local wallet_dir="$hq_dir/wallet"
+    local genesis_file="$hq_dir/genesis.json"
+    local config_file="$hq_dir/config.json"
+
+    mkdir -p "$wallet_dir"
+    if [[ ! -s "$genesis_file" ]]; then
+        info_log "Downloading HyperQube's genesis.json …"
+        curl -fsSL -o "$genesis_file" "$genesis_url" || {
+            error_log "Failed to download genesis.json from $genesis_url"; return 1; }
     fi
 
-    echo "Modifying HyperQube config.json..."
+    if [[ -f "$config_file" ]]; then
+        cp "$config_file" "${config_file}.bak.$(date +%s)"
+        info_log "Existing config.json file found and backed up. Minimal config.json created."
+    fi
 
-    jq '.Net.ListenPort = 45995' "$config_file" > "$config_file.tmp" && mv "$config_file.tmp" "$config_file"
-    echo "Updated ListenPort to 45995 in config.json"
+    cat > "$config_file" <<EOF
+{
+  "DataPath": "$hq_dir",
+  "WalletPath": "$wallet_dir",
+  "GenesisFile": "$genesis_file",
+  "LogLevel": "info",
+  "RPC": {
+    "EnableHTTP": true,
+    "EnableWS": true,
+    "HTTPHost": "0.0.0.0",
+    "HTTPPort": 35997,
+    "WSHost": "0.0.0.0",
+    "WSPort": 35998,
+    "HTTPCors": ["*"],
+    "WSOrigins": ["*"]
+  },
+  "Net": {
+    "ListenHost": "0.0.0.0",
+    "ListenPort": 45995,
+    "MinPeers": 14,
+    "MinConnectedPeers": 14,
+    "MaxPeers": 60,
+    "MaxPendingPeers": 10,
+    "Seeders": [
+      "enode://763935dbbdd2ed59e64d2263884887abf865165129f18af9fb1cd0e961b936405144970e7363e6be3d0f0bc3d1e4a0e2ac22306335b8102941728718e063777b@45.77.193.218:45995",
+      "enode://1e2183f24ad6808770ac233136289ab6bdb8c3611dc0f10e4cf5a0bdaa65a1f78682b4cce6fc72c1b2a08112ce1627fd380b2477bb644741db0f45f8a05edd2b",
+      "enode://245044b8f6a639d5e4f9f617930ab97f0061531f6a7ce215d780abda6810f6e5af17a4d0d2376689a673ad1b3bee16a81fe49e38d988bfefcbaa0e371d3e44e9@159.69.22.88:45995"
+    ]
+  }
 }
+EOF
 
+    success_log "HyperQube config.json generated and genesis downloaded."
+}
 
 export -f install_dependencies
 export -f install_go
