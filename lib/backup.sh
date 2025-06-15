@@ -82,23 +82,29 @@ backup_node() {
     prune_old_backups "$service"
 
     if [[ "${ZNNSH_INTERACTIVE_MODE:-true}" == "true" ]]; then
-        if gum confirm "Would you like to set up recurring backups?"; then
+        if gum confirm "Would you like to set up scheduled backups?"; then
 
             local input_max cadence_choice days hour_input
             input_max=$(gum input --placeholder "$ZNNSH_MAX_BACKUPS" --prompt "Max backups to keep (1-30) ➜ " || echo "")
             if [[ -n "$input_max" && "$input_max" =~ ^[1-9][0-9]?$ && "$input_max" -le 30 ]]; then
                 ZNNSH_MAX_BACKUPS="$input_max"
             fi
-            cadence_choice=$(printf "none\ndaily\nweekly\ncustom" | gum choose --cursor.foreground 46 --header "Select backup cadence" || echo "daily")
+            cadence_choice=$(printf "Daily → Backup every 24h\nWeekly → Backup every 7 days\nCustom → Backup every N days" | gum choose --cursor.foreground 46 --header="$(gum style --foreground 242 --padding "1 1" "SELECT BACKUP CADENCE:")" || true)
+            cadence_choice=$(echo "$cadence_choice" | awk '{print tolower($1)}')
             case "$cadence_choice" in
-              none)   ZNNSH_BACKUP_CADENCE_DAYS=0;;
               daily)  ZNNSH_BACKUP_CADENCE_DAYS=1;;
               weekly) ZNNSH_BACKUP_CADENCE_DAYS=7;;
               custom)
-                  days=$(gum input --placeholder "0" --prompt "Days between backups (0-365) ➜ " || echo "0")
-                  if [[ "$days" =~ ^[0-9]+$ && "$days" -le 365 ]]; then
+                  days=$(gum input --placeholder "3" --prompt "Number of days between backups (1-365) ➜ " || echo "")
+                  if [[ "$days" =~ ^[1-9][0-9]*$ && "$days" -le 365 ]]; then
                      ZNNSH_BACKUP_CADENCE_DAYS="$days"
+                  else
+                     error_log "Invalid days input; defaulting to 1 day cadence."
+                     ZNNSH_BACKUP_CADENCE_DAYS=1
                   fi;;
+              *)
+                  warn_log "No cadence selected, cancelling scheduled backup setup."
+                  return 0;;
             esac
           
             hour_input=$(gum input --placeholder "2" --prompt "Hour of day (0-23) to run backup ➜ " || echo "")

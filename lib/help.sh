@@ -43,13 +43,13 @@ ASCII
     gum style --foreground "#A9A9A9" "COMMANDS:"
 
     printf "%-40s %s\n" "--deploy [type] [repository] [branch]" "Deploy a node." \
-                               "--backup [type] [--max-backups N] [--cadence D] [--backup-hour H]" "Create a snapshot." \
-                               "--restore [type] [--backup-file FILE]" "Restore from a snapshot." \
                                "--restart [type]" "Restart the node service." \
                                "--stop [type]" "Stop the node service." \
                                "--start [type]" "Start the node service." \
                                "--monitor [type]" "Monitor node logs in real-time." \
                                "--resync [type]" "Resync the node from genesis." \
+                               "--backup [type] [--max-backups <number>] [--cadence <number of days>] [--backup-hour <time in 24h  format>]" "Create a snapshot." \
+                               "--restore [type] [--backup-file <filename>]" "Restore from a snapshot." \
                                "--analytics" "Show the analytics dashboard." \
                                "--help" "Display this help message."
 
