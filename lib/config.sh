@@ -39,7 +39,6 @@ export ZNNSH_ZNN_DIR="${ZNNSH_ZNN_DIR:=/root/.znn}"
 export ZNNSH_HQZD_DIR="${ZNNSH_HQZD_DIR:=/root/.hqzd}"
 export ZNNSH_HQZD_GENESIS_URL="${ZNNSH_HQZD_GENESIS_URL:=https://gist.githubusercontent.com/georgezgeorgez/32edacf2681d7491169342cd8c698cdb/raw/f02295d4616f09b6cf606e0306fa501ad09856ba/genesis.json}"
 
-export ZNNSH_BUILD_SOURCE="${ZNNSH_BUILD_SOURCE:=false}"
 export ZNNSH_BUILD_URL="${ZNNSH_BUILD_URL:=}"
 export ZNNSH_BUILD_BRANCH="${ZNNSH_BUILD_BRANCH:=master}"
 
