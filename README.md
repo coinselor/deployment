@@ -1,116 +1,109 @@
-# Zenon Network Setup Script
+# Deployment
 
-This script automates the setup, management, and restoration of both Zenon Network (`go-zenon`) and HyperQube (`hyperqube_z`) nodes. It handles dependencies installation, Go installation, node deployment, and service management. The script also offers additional options for restoring from a bootstrap, monitoring logs, and installing Grafana for visualizing data.
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Shellcheck](https://github.com/hypercore-one/deployment/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/hypercore-one/deployment/actions/workflows/shellcheck.yml)
 
-## Features
+---
 
-- **Multiple Node Support**: Deploy and manage both Zenon Network and HyperQube nodes
-- **Automated Go Installation**: Installs Go 1.23.0 (or another version if changed) based on the system architecture
-- **Automated Node Deployment**: Clones the repository, builds it, and sets it up as a service
-- **Automated Dependencies Installation**: Installs `make`, `gcc`, and `jq` automatically without user intervention
-- **Service Management**: Provides options to stop, start, and restart the services
-- **Restore from Bootstrap**: Downloads and runs a script to restore the node from a bootstrap
-- **Log Monitoring**: Allows you to monitor logs in real-time
-- **Grafana Installation**: Optionally installs Grafana for monitoring metrics
-- **Non-Interactive Installations**: Automatically selects default options during package installation to avoid any prompts
+## Zenon.sh: An Independent Script
+This script faciliates the deployment and management of [Zenon Network](https://zenon.network) and [HyperQube](https://hyperqube.network) nodes. It provides an interactive TUI for ease of use and non-interactive commands for automation.
 
-## Prerequisites
+---
 
-This script assumes you're running a Linux distribution that uses `apt` as a package manager (e.g., Ubuntu or Debian). You need to have `git` installed. You must also have superuser (root) privileges to execute this script.
+## 🚀 Quick Start
 
-## Usage
+Follow these steps on a Linux server:
 
-Clone the script or save it locally, then run it using a bash terminal:
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/hypercore-one/deployment.git
+   ```
+2. **Enter the folder**
+   ```bash
+   cd deployment
+   ```
+3. **(First run only) make the script executable**
+   ```bash
+   chmod u+x zenon.sh
+   ```
+4. **Launch the interactive TUI** (requires root privileges)
+   ```bash
+   sudo ./zenon.sh
+   ```
 
-```bash
-sudo ./go-zenon.sh [OPTIONS]
+---
+
+## ✨ Features
+- [x] **Interactive TUI** via [gum](https://github.com/charmbracelet/gum)
+- [x] **Deploy** – build a node from source
+- [x] **Backup & Restore** – Manually backup and restore the node, or schedule automatic backups.
+- [x] **Service Control** – Start, stop, and restart the node.
+- [x] **Resync Node** – Resynchronize the node from genesis.
+- [x] **Analytics** - Graphical dashboards for monitoring node performance and health via [Grafana](https://grafana.com)
+
+---
+
+## 📂 Directory Map
+```text
+.
+├── zenon.sh           # Entry-point CLI
+├── lib/               
+│   ├── build.sh
+│   ├── backup.sh
+│   ├── deploy.sh
+│   └── …
+└── dashboards/        # Grafana JSON exports
 ```
 
-### Options
+---
 
-- `--deploy`: Deploy and set up the Zenon Network
-- `--deploy --hq [URL]`: Deploy and set up the HyperQube Network (optional custom repository URL)
-- `--buildSource [URL]`: Build from a specific source repository
-- `--restore`: Restore from a bootstrap
-- `--restart`: Restart the service
-- `--stop [--hq]`: Stop the node service (add --hq for HyperQube)
-- `--start [--hq]`: Start the node service (add --hq for HyperQube)
-- `--status [--hq]`: Monitor logs (add --hq for HyperQube)
-- `--grafana`: Install Grafana for monitoring metrics
-- `--help`: Display the help message
+## 🛠️ Interactive Usage Cheatsheet (RECOMMENDED)
+| Action         | Command                                                                                                | Notes                                                                                                |
+|----------------|--------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| Interactive TUI    | `sudo ./zenon.sh` <br> `sudo ./zenon.sh [zenon\|hyperqube]`                                             | Launches TUI. `zenon` is default.                                                                    |
 
-### Example Usage
 
-#### Deploying Nodes
+For HyperQube usage, use `sudo ./zenon.sh hyperqube`.
 
-To deploy the Zenon Network:
-```bash
-sudo ./go-zenon.sh --deploy
-```
 
-To deploy HyperQube:
-```bash
-sudo ./go-zenon.sh --deploy --hq
-```
+## 🛠️ Non-Interactive Usage Cheatsheet
+| Action         | Command                                                                                                | Notes                                                                                                |
+|----------------|--------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| Deploy         | `sudo ./zenon.sh --deploy [zenon\|hyperqube] [repo_url] [branch_name]`                                   | `zenon` is default. `repo_url` & `branch_name` optional.                                             |
+| Backup         | `sudo ./zenon.sh --backup  [zenon\|hyperqube]` <br> `[--max-backups N] [--cadence DAYS] [--backup-hour HOUR]`     | `zenon` is default. Backups node. Use TUI for scheduling.                                            |
+| Restore        | `sudo ./zenon.sh --restore [zenon\|hyperqube] [--backup-file FILE]`                                       | `zenon` is default. Restores node from backup. Prompts if `FILE` omitted.                               |
+| Start Service  | `sudo ./zenon.sh --start [zenon\|hyperqube]`                                                            | `zenon` is default. Starts service node.                                                             |
+| Stop Service   | `sudo ./zenon.sh --stop [zenon\|hyperqube]`                                                             | `zenon` is default. Stops service node.                                                              |
+| Restart Service| `sudo ./zenon.sh --restart [zenon\|hyperqube]`                                                          | `zenon` is default. Restarts service node.                                                           |
+| Monitor Logs   | `sudo ./zenon.sh --monitor [zenon\|hyperqube]`                                                          | `zenon` is default. Monitor service logs. URL.                                                |
+| Resync Node    | `sudo ./zenon.sh --resync [zenon\|hyperqube]`                                                           | `zenon` is default. Resyncs node from genesis.                                                       |
+| Analytics      | `sudo ./zenon.sh --analytics [zenon\|hyperqube]`                                                        | `zenon` is default. Installs the analytics stack (Grafana, Node-Exporter, Prometheus).                                                         |
+| Help           | `./zenon.sh --help`                                                                                    | Displays full help. (No `sudo` needed)                                                               |
 
-To deploy HyperQube with a custom repository:
-```bash
-sudo ./go-zenon.sh --deploy --hq https://github.com/your-fork/hyperqube_z.git
-```
+---
 
-#### Managing Services
+## ⚙️ Configuration
+<details>
+<summary>Environment variables (from <code>lib/environment.sh</code>)</summary>
 
-Start Zenon service:
-```bash
-sudo ./go-zenon.sh --start
-```
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ZNNSH_REPO_URL` | `https://github.com/zenon-network/go-zenon.git` | Git repo to clone |
+| `ZNNSH_BRANCH_NAME` | `master` | Git branch/tag |
+| `ZNNSH_DEBUG` | `false` | Enable debug mode |
+| `ZNNSH_BACKUP_DIR` | `/backup` | Where to store tar.gz backups |
+| _(many more)_ |   | See file for full list |
+</details>
 
-Start HyperQube service:
-```bash
-sudo ./go-zenon.sh --start --hq
-```
+To override variables at run time, use `sudo ZNNSH_VARIABLE_NAME=value ./zenon.sh [COMMAND] [FLAGS]`.
 
-Stop Zenon service:
-```bash
-sudo ./go-zenon.sh --stop
-```
+---
 
-Stop HyperQube service:
-```bash
-sudo ./go-zenon.sh --stop --hq
-```
+## 🧹 ShellCheck
 
-Monitor Zenon logs:
-```bash
-sudo ./go-zenon.sh --status
-```
+A project-wide `.shellcheckrc` can be committed to customize linting for all contributors and CI.
 
-Monitor HyperQube logs:
-```bash
-sudo ./go-zenon.sh --status --hq
-```
+---
 
-### Default Configurations
-
-#### Zenon Network
-- Repository: https://github.com/zenon-network/go-zenon.git
-- Branch: master
-- Binary: znnd
-- Service: go-zenon
-
-#### HyperQube
-- Repository: https://github.com/hypercore-one/hyperqube_z.git
-- Branch: hyperqube_z
-- Binary: hqzd
-- Service: go-hyperqube
-
-### Customizing the Script
-
-You can adjust the Go version by modifying the `GO_VERSION` variable in the script. The default is `1.23.0`.
-
-## Notes
-
-- Ensure you run this script as root or use `sudo` for it to function properly
-- The script is designed to be non-interactive when installing dependencies
-- Be cautious when running the script, as it will automatically update and upgrade your system packages during the `apt-get` operations
-- When no options are specified, the script defaults to deploying a Zenon Network node
+## 📜 License
+This project is licensed under the terms of the GNU General Public License v3.0. See [`LICENSE`](LICENSE) for details.
