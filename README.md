@@ -39,7 +39,7 @@ The interactive TUI is the recommended approach for most users:
 
 | Action | Command | Notes |
 |--------|---------|-------|
-| Launch TUI | `sudo ./zenon.sh` or `sudo ./zenon.sh [zenon|hyperqube]` | Launches interactive menu. `zenon` is default. |
+| Launch TUI | `sudo ./zenon.sh` or `sudo ./zenon.sh [zenon\|hyperqube]` | Launches interactive menu. `zenon` is default. |
 
 For HyperQube usage, use `sudo ./zenon.sh hyperqube`.
 
@@ -49,14 +49,14 @@ For automation and scripting, use the following commands:
 
 | Action | Command | Notes |
 |--------|---------|-------|
-| Deploy | `sudo ./zenon.sh --deploy [zenon|hyperqube] [repo_url] [branch_name]` | `zenon` is default. `repo_url` and `branch_name` are optional. |
-| Backup | `sudo ./zenon.sh --backup [zenon|hyperqube] [--max-backups N] [--cadence DAYS] [--backup-hour HOUR]` | `zenon` is default. Creates backup snapshots. Use TUI for scheduling automated backups. |
-| Restore | `sudo ./zenon.sh --restore [zenon|hyperqube] [--backup-file FILE]` | `zenon` is default. Restores from backup. Prompts interactively if `FILE` is omitted. |
-| Start Service | `sudo ./zenon.sh --start [zenon|hyperqube]` | `zenon` is default. Starts the node service. |
-| Stop Service | `sudo ./zenon.sh --stop [zenon|hyperqube]` | `zenon` is default. Stops the node service. |
-| Restart Service | `sudo ./zenon.sh --restart [zenon|hyperqube]` | `zenon` is default. Restarts the node service. |
-| Monitor Logs | `sudo ./zenon.sh --monitor [zenon|hyperqube]` | `zenon` is default. Follows service logs in real-time. |
-| Resync Node | `sudo ./zenon.sh --resync [zenon|hyperqube]` | `zenon` is default. Resynchronizes node from genesis. |
+| Deploy | `sudo ./zenon.sh --deploy [zenon\|hyperqube] [repo_url] [branch_name]` | `zenon` is default. `repo_url` and `branch_name` are optional. |
+| Backup | `sudo ./zenon.sh --backup [zenon\|hyperqube] [--max-backups N] [--cadence DAYS] [--backup-hour HOUR]` | `zenon` is default. Creates backup snapshots. Use TUI for scheduling automated backups. |
+| Restore | `sudo ./zenon.sh --restore [zenon\|hyperqube] [--backup-file FILE]` | `zenon` is default. Restores from backup. Prompts interactively if `FILE` is omitted. |
+| Start Service | `sudo ./zenon.sh --start [zenon\|hyperqube]` | `zenon` is default. Starts the node service. |
+| Stop Service | `sudo ./zenon.sh --stop [zenon\|hyperqube]` | `zenon` is default. Stops the node service. |
+| Restart Service | `sudo ./zenon.sh --restart [zenon\|hyperqube]` | `zenon` is default. Restarts the node service. |
+| Monitor Logs | `sudo ./zenon.sh --monitor [zenon\|hyperqube]` | `zenon` is default. Follows service logs in real-time. |
+| Resync Node | `sudo ./zenon.sh --resync [zenon\|hyperqube]` | `zenon` is default. Resynchronizes node from genesis. |
 | Analytics | `sudo ./zenon.sh --analytics` | Installs analytics stack (Grafana, Node Exporter, Prometheus). |
 | Help | `./zenon.sh --help` | Displays comprehensive help information. |
 
@@ -109,7 +109,7 @@ For automation and scripting, use the following commands:
 ### HyperQube Configuration
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `ZNNSH_HQZD_GENESIS_URL` | `https://gist.githubusercontent.com/.../genesis.json` | HyperQube genesis file URL |
+| `ZNNSH_HQZD_GENESIS_URL` | `https://gist.githubusercontent.com/georgezgeorgez/32edacf2681d7491169342cd8c698cdb/raw/f02295d4616f09b6cf606e0306fa501ad09856ba/genesis.json` | HyperQube genesis file URL |
 
 See `lib/config.sh` for the complete list of configuration options.
 </details>
